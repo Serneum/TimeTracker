@@ -1,0 +1,38 @@
+apply plugin: 'war'
+apply plugin: 'appengine'
+
+def appEmail = 'serneum@gmail.com'
+def appId = 'onix-challenge'
+def appengineVersion = '1.9.24'
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.google.appengine:gradle-appengine-plugin:1.9.24'
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    appengineSdk "com.google.appengine:appengine-java-sdk:${appengineVersion}"
+    compile "com.google.appengine:appengine-api-1.0-sdk:${appengineVersion}"
+    compile "javax.servlet:servlet-api:2.5"
+    compile 'org.apache.commons:commons-lang3:3.0'
+}
+
+appengine {
+    httpPort = 8888
+    downloadSdk = true
+
+    appcfg {
+        email = "${appEmail}"
+        noCookies = true
+        oauth2 = true
+    }
+}
