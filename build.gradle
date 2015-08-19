@@ -3,7 +3,7 @@ apply plugin: 'appengine'
 
 def appEmail = 'serneum@gmail.com'
 def appId = 'onix-challenge'
-def appengineVersion = '1.9.24'
+def appengineVersion = '1.9.25'
 
 buildscript {
     repositories {
@@ -23,7 +23,7 @@ dependencies {
     appengineSdk "com.google.appengine:appengine-java-sdk:${appengineVersion}"
     compile "com.google.appengine:appengine-api-1.0-sdk:${appengineVersion}"
     compile "javax.servlet:servlet-api:2.5"
-    compile 'org.apache.commons:commons-lang3:3.0'
+    compile 'commons-lang:commons-lang:2.6'
 }
 
 appengine {
@@ -36,3 +36,10 @@ appengine {
         oauth2 = true
     }
 }
+
+task copyDeps(type: Copy) {
+    from configurations.runtime
+    into 'lib'
+}
+
+task cleanAll(dependsOn: ['clean', 'cleanCopyDeps'])
