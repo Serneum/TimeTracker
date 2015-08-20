@@ -2,7 +2,7 @@ apply plugin: 'war'
 apply plugin: 'appengine'
 
 def appEmail = 'serneum@gmail.com'
-def appId = 'onix-challenge'
+def appId = 'symbolic-heaven-104219'
 def appengineVersion = '1.9.25'
 
 buildscript {
