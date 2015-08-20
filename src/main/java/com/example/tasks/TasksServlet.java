@@ -1,23 +1,51 @@
 package com.example.tasks;
 
+import com.example.user.TaskUser;
 import com.google.appengine.api.users.User;
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
 import com.googlecode.objectify.ObjectifyService;
+import com.googlecode.objectify.Key;
+import com.googlecode.objectify.cmd.LoadType;
+import com.googlecode.objectify.cmd.Query;
+
 import org.apache.commons.lang.StringUtils;
 
 import java.io.IOException;
-import java.util.Properties;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
+import javax.servlet.RequestDispatcher;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.example.tasks.Task;
+import com.example.user.TaskUser;
+
 public class TasksServlet extends HttpServlet {
+    private static final Logger log = Logger.getLogger(TasksServlet.class.getName());
+
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
-    throws IOException {
-        resp.sendRedirect("tasks.jsp");
+    throws IOException, ServletException {
+        UserService userService = UserServiceFactory.getUserService();
+        User user = userService.getCurrentUser();
+
+        Key<TaskUser> taskUser = Key.create(TaskUser.class, user.getNickname());
+        List<Task> taskList = ObjectifyService.ofy()
+                .load()
+                .type(Task.class)
+                .ancestor(taskUser)
+                .order("dueDate")
+                .list();
+
+        req.setAttribute("user", user);
+        req.setAttribute("taskList", taskList);
+        RequestDispatcher dispatcher = req.getRequestDispatcher("tasks.jsp");
+        dispatcher.forward(req, resp);
     }
 
     @Override
@@ -29,12 +57,14 @@ public class TasksServlet extends HttpServlet {
         String description = getSanitizedValue(req, "description");
         boolean completed = getBoolean(req, "completed");
 
-        Task task = new TaskBuilder().user(user.getNickname()).description(description).completed(completed).build();
+        Task task = new TaskBuilder()
+                .user(user.getNickname())
+                .description(description)
+                .completed(completed)
+                .dueDate("12/31/2015")
+                .build();
 
-        // Use Objectify to save the greeting and now() is used to make the call synchronously as we
-        // will immediately get a new page using redirect and we want the data to be present.
         ObjectifyService.ofy().save().entity(task).now();
-
         resp.sendRedirect("/tasks");
     }
 

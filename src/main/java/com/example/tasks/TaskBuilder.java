@@ -2,18 +2,10 @@ package com.example.tasks;
 
 import org.apache.commons.lang.StringUtils;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.IllegalFormatException;
-
 public class TaskBuilder {
-
-    private static SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
-
     private String user;
     private String description;
-    private Date dueDate;
+    private String dueDate;
     private boolean completed = false;
 
     public TaskBuilder() {
@@ -30,12 +22,7 @@ public class TaskBuilder {
     }
 
     public TaskBuilder dueDate(String dueDate) {
-        try {
-            this.dueDate = format.parse(dueDate);
-        }
-        catch (ParseException e) {
-            throw new IllegalArgumentException("Unable to parse the provided date");
-        }
+        this.dueDate = dueDate;
         return this;
     }
 
@@ -66,7 +53,7 @@ public class TaskBuilder {
         return description;
     }
 
-    protected Date getDueDate() {
+    protected String getDueDate() {
         return dueDate;
     }
 

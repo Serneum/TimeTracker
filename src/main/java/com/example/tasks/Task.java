@@ -7,10 +7,13 @@ import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Parent;
 import com.googlecode.objectify.Key;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 @Entity
 public class Task {
+    private static SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
 
     @Parent
     Key<TaskUser> user;
@@ -30,7 +33,7 @@ public class Task {
         this();
         this.user = Key.create(TaskUser.class, builder.getUser());
         this.description = builder.getDescription();
-        this.dueDate = builder.getDueDate();
+        setDueDate(builder.getDueDate());
         this.completed = builder.getCompleted();
     }
 
@@ -48,5 +51,14 @@ public class Task {
 
     public Date getDueDate() {
         return dueDate;
+    }
+
+    private void setDueDate(String dueDate) {
+        try {
+            this.dueDate = format.parse(dueDate);
+        }
+        catch (ParseException e) {
+            throw new IllegalArgumentException("Unable to parse the provided date");
+        }
     }
 }
