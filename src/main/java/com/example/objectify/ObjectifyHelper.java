@@ -1,7 +1,7 @@
 package com.example.objectify;
 
 import com.example.tasks.Task;
-import com.example.user.User;
+import com.example.user.TaskUser;
 import com.googlecode.objectify.ObjectifyService;
 
 import javax.servlet.ServletContextListener;
@@ -11,7 +11,7 @@ public class ObjectifyHelper implements ServletContextListener {
     public void contextInitialized(ServletContextEvent event) {
         // This will be invoked as part of a warmup request, or the first user request if no warmup
         // request.
-        ObjectifyService.register(User.class);
+        ObjectifyService.register(TaskUser.class);
         ObjectifyService.register(Task.class);
     }
 

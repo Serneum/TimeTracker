@@ -4,12 +4,12 @@ import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 
 @Entity
-public class User {
+public class TaskUser {
 
     @Id
     private String name;
 
-    public User(String name) {
+    public TaskUser(String name) {
         this.name = name;
     }
 

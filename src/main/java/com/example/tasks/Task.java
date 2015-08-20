@@ -1,6 +1,6 @@
 package com.example.tasks;
 
-import com.example.user.User;
+import com.example.user.TaskUser;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 import com.googlecode.objectify.annotation.Index;
@@ -13,7 +13,7 @@ import java.util.Date;
 public class Task {
 
     @Parent
-    Key<User> user;
+    Key<TaskUser> user;
 
     @Id
     public Long id;
@@ -29,6 +29,7 @@ public class Task {
 
     protected Task(TaskBuilder builder) {
         this();
+        this.user = Key.create(TaskUser.class, builder.getUser());
         this.message = builder.getMessage();
         this.completed = builder.getCompleted();
     }

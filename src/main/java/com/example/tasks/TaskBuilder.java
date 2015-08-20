@@ -2,10 +2,16 @@ package com.example.tasks;
 
 public class TaskBuilder {
 
+    private String user;
     private String message;
     private boolean completed = false;
 
     public TaskBuilder() {
+    }
+
+    public TaskBuilder user(String user) {
+        this.user = user;
+        return this;
     }
 
     public TaskBuilder message(String message) {
@@ -20,6 +26,10 @@ public class TaskBuilder {
 
     public Task build() {
         return new Task(this);
+    }
+
+    protected String getUser() {
+        return user;
     }
 
     protected String getMessage() {
