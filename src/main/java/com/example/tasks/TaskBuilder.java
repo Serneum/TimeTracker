@@ -1,9 +1,16 @@
 package com.example.tasks;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class TaskBuilder {
 
+    private static SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+
     private String user;
-    private String message;
+    private String description;
+    private Date dueDate;
     private boolean completed = false;
 
     public TaskBuilder() {
@@ -15,7 +22,13 @@ public class TaskBuilder {
     }
 
     public TaskBuilder message(String message) {
-        this.message = message;
+        this.description = message;
+        return this;
+    }
+
+    public TaskBuilder dueDate(String dueDate)
+    throws ParseException {
+        this.dueDate = format.parse(dueDate);
         return this;
     }
 
@@ -32,8 +45,12 @@ public class TaskBuilder {
         return user;
     }
 
-    protected String getMessage() {
-        return message;
+    protected String getDescription() {
+        return description;
+    }
+
+    protected Date getDueDate() {
+        return dueDate;
     }
 
     protected boolean getCompleted() {

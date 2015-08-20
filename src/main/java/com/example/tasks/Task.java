@@ -19,18 +19,18 @@ public class Task {
     public Long id;
 
     @Index
-    private Date date;
-    private String message;
+    private Date dueDate;
+    private String description;
     private boolean completed = false;
 
     private Task() {
-        this.date = new Date();
     }
 
     protected Task(TaskBuilder builder) {
         this();
         this.user = Key.create(TaskUser.class, builder.getUser());
-        this.message = builder.getMessage();
+        this.description = builder.getDescription();
+        this.dueDate = builder.getDueDate();
         this.completed = builder.getCompleted();
     }
 
@@ -38,15 +38,15 @@ public class Task {
         return user.getName();
     }
 
-    public String getMessage() {
-        return message;
+    public String getDescription() {
+        return description;
     }
 
     public boolean isCompleted() {
         return completed;
     }
 
-    public Date getDate() {
-        return date;
+    public Date getDueDate() {
+        return dueDate;
     }
 }
