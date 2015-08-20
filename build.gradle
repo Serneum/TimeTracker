@@ -29,6 +29,14 @@ dependencies {
     testCompile 'org.mockito:mockito-all:1.10.19'
 }
 
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java', 'src/web/java']
+        }
+    }
+}
+
 appengine {
     httpPort = 8888
     downloadSdk = true
@@ -47,7 +55,5 @@ task copyDeps(type: Copy) {
     from configurations.testCompile
     into 'lib'
 }
-
-task runTests(type: Test)
 
 task cleanAll(dependsOn: ['clean', 'cleanCopyDeps'])

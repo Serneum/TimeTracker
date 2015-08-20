@@ -15,16 +15,8 @@
     %>
 
     <body>
-        <c:choose>
-            <c:when test="${not empty user}">
-                <p>Hello, ${fn:escapeXml(user.nickname)}! (You can
-                    <a href="<%= userService.createLogoutURL(request.getRequestURI()) %>">sign out</a>.)</p>
-            </c:when>
-            <c:otherwise>
-                <p>You must be <a href="<%= userService.createLoginURL(request.getRequestURI()) %>">signed in</a>
-                    to create new tasks.</p>
-            </c:otherwise>
-        </c:choose>
+        <p>Hello, ${fn:escapeXml(user.nickname)}! (You can
+            <a href="<%= userService.createLogoutURL("/tasks") %>">sign out</a>.)</p>
 
         <p>Tasks</p>
         <table>
