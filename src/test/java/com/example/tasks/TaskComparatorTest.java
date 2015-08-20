@@ -5,8 +5,6 @@ import org.junit.Test;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
 
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.mock;
@@ -29,8 +27,6 @@ public class TaskComparatorTest {
 
         when(task1.getDueDate()).thenReturn(format.parse("01/01/2015"));
         when(task2.getDueDate()).thenReturn(format.parse("01/01/2015"));
-
-
     }
 
     @Test
