@@ -11,7 +11,7 @@ import static org.mockito.Mockito.mock;
 import static org.mockito.Mockito.when;
 
 public class TaskComparatorTest {
-    private static SimpleDateFormat format = new SimpleDateFormat("MM/dd/yyyy");
+    private static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
     private Task task1;
     private Task task2;
@@ -25,8 +25,8 @@ public class TaskComparatorTest {
         when(task1.isCompleted()).thenReturn(false);
         when(task2.isCompleted()).thenReturn(false);
 
-        when(task1.getDueDate()).thenReturn(format.parse("01/01/2015"));
-        when(task2.getDueDate()).thenReturn(format.parse("01/01/2015"));
+        when(task1.getDueDate()).thenReturn(format.parse("2015-01-01"));
+        when(task2.getDueDate()).thenReturn(format.parse("2015-01-01"));
     }
 
     @Test
@@ -46,7 +46,7 @@ public class TaskComparatorTest {
     @Test
     public void task1DueFirstTest()
     throws ParseException {
-        when(task2.getDueDate()).thenReturn(format.parse("12/31/2015"));
+        when(task2.getDueDate()).thenReturn(format.parse("2015-12-31"));
         int result = new TaskComparator().compare(task1, task2);
         assertEquals(-1, result);
     }
@@ -54,7 +54,7 @@ public class TaskComparatorTest {
     @Test
     public void task2DueFirstTest()
     throws ParseException {
-        when(task1.getDueDate()).thenReturn(format.parse("12/31/2015"));
+        when(task1.getDueDate()).thenReturn(format.parse("2015-12-31"));
         int result = new TaskComparator().compare(task1, task2);
         assertEquals(1, result);
     }
