@@ -10,7 +10,7 @@ public class TaskBuilderTest {
     @Test
     public void messageTest() {
         Task task = new TaskBuilder().message("Hello World").build();
-        assertEquals("Hello World", task.getMessage());
+        assertEquals("Hello World", task.getDescription());
     }
 
     @Test
