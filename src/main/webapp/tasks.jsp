@@ -4,6 +4,7 @@
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
 <%@ page import="org.apache.commons.lang.StringUtils" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 
 <html>
     <head>
@@ -22,21 +23,19 @@
         User user = userService.getCurrentUser();
         if (user != null) {
             pageContext.setAttribute("user", user);
-    %>
-
-    <p>Hello, ${fn:escapeXml(user.nickname)}! (You can
-        <a href="<%= userService.createLogoutURL(request.getRequestURI()) %>">sign out</a>.)</p>
-    <%
-    }
-    else {
-    %>
-    <p>Hello!
-        <a href="<%= userService.createLoginURL(request.getRequestURI()) %>">Sign in</a>
-        to include your name with greetings you post.</p>
-    <%
         }
     %>
 
+    <c:choose>
+        <c:when test="${not empty user}">
+            <p>Hello, ${fn:escapeXml(user.nickname)}! (You can
+                <a href="<%= userService.createLogoutURL(request.getRequestURI()) %>">sign out</a>.)</p>
+        </c:when>
+        <c:otherwise>
+            <p>You must be <a href="<%= userService.createLoginURL(request.getRequestURI()) %>">signed in</a>
+                to create new tasks.</p>
+        </c:otherwise>
+    </c:choose>
 
     <form action="/guestbook.jsp" method="get">
         <div><input type="text" name="guestbookName" value="${fn:escapeXml(guestbookName)}"/></div>

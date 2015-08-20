@@ -23,7 +23,9 @@ dependencies {
     appengineSdk "com.google.appengine:appengine-java-sdk:${appengineVersion}"
     compile "com.google.appengine:appengine-api-1.0-sdk:${appengineVersion}"
     compile "javax.servlet:servlet-api:2.5"
+    compile 'com.googlecode.objectify:objectify:5.1.6'
     compile 'commons-lang:commons-lang:2.6'
+    testCompile 'junit:junit:4.12'
 }
 
 appengine {
@@ -41,5 +43,7 @@ task copyDeps(type: Copy) {
     from configurations.runtime
     into 'lib'
 }
+
+task runTests(type: Test)
 
 task cleanAll(dependsOn: ['clean', 'cleanCopyDeps'])
