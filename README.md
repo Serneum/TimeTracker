@@ -16,3 +16,5 @@ The main page is located at /tasks, so for a local run it would be `http://local
 - Visual cue (red color) for overdue tasks
 - Separate complete and incomplete tasks (toggle with link)
 - Automatic deploying from Travis-CI
+- Bootstrap  
+- React  
