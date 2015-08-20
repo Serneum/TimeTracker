@@ -26,10 +26,10 @@ public class TasksServlet extends HttpServlet {
         UserService userService = UserServiceFactory.getUserService();
         User user = userService.getCurrentUser();  // Find out who the user is.
 
-        String message = getSanitizedValue(req, "message");
+        String description = getSanitizedValue(req, "description");
         boolean completed = getBoolean(req, "completed");
 
-        Task task = new TaskBuilder().user(user.getNickname()).message(message).completed(completed).build();
+        Task task = new TaskBuilder().user(user.getNickname()).description(description).completed(completed).build();
 
         // Use Objectify to save the greeting and now() is used to make the call synchronously as we
         // will immediately get a new page using redirect and we want the data to be present.

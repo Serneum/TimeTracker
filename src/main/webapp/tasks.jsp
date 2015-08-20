@@ -95,7 +95,7 @@
     <br/>
     <p>Create New Task</p>
     <form action="/tasks" method="post">
-        <div>Task: <textarea name="message" rows="3" cols="60"></textarea></div>
+        <div>Task: <textarea name="description" rows="3" cols="60"></textarea></div>
         <div><input type="checkbox" name="completed"/>Completed</div>
         <div><input type="submit" value="Save Task"/></div>
     </form>
