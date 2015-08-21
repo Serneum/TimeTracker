@@ -81,8 +81,6 @@ public class TasksServlet extends HttpServlet {
         boolean completed = getBoolean(req, "completed");
         String taskId = getSanitizedValue(req, "taskId");
 
-        logger.info(taskId);
-
         Task task = null;
         try {
             if (StringUtils.isBlank(taskId)) {

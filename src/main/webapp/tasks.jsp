@@ -52,7 +52,7 @@
         <br/>
         <p>${inEditMode ? "Edit" : "Create New"} Task</p>
         <c:if test="${not empty error}"><div>${error}</div></c:if>
-        <form action="/tasks" method="post">
+        <form action="#" method="post">
             <div>Task: <textarea name="description" rows="3" cols="60">${inEditMode ? editTask.description : ""}</textarea></div>
             <div>Due Date: <input type="date" name="dueDate" value="${inEditMode ? editTask.formattedDueDate : ""}"></div>
             <div><input type="checkbox" name="completed" <c:if test="${inEditMode && editTask.completed}">checked="checked"</c:if>/>Completed</div>
