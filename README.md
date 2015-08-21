@@ -16,5 +16,3 @@ Point your browser to `http://localhost:8888/`
 - Visual cue (red color) for overdue tasks
 - Separate complete and incomplete tasks (toggle with link)
 - Automatic deploying from Travis-CI
-- Bootstrap
-- React
