@@ -9,12 +9,12 @@
 - Redirect to login page when not authenticated
 
 ### How to use
-`gradle appengineRun`  
-The main page is located at /tasks, so for a local run it would be `http://localhost:8888/tasks`
+`gradle appengineRun`
+Point your browser to `http://localhost:8888/`
 
 ### TODO (optional)
 - Visual cue (red color) for overdue tasks
 - Separate complete and incomplete tasks (toggle with link)
 - Automatic deploying from Travis-CI
-- Bootstrap  
-- React  
+- Bootstrap
+- React
