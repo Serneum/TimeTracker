@@ -84,33 +84,38 @@ public class TasksServlet extends HttpServlet {
         String taskId = getSanitizedValue(req, "taskId");
 
         Task task = null;
-        try {
-            if (StringUtils.isBlank(taskId)) {
-                // Create new entry
-                task = new TaskBuilder()
-                        .user(user.getNickname())
-                        .description(description)
-                        .completed(completed)
-                        .dueDate(dueDate)
-                        .build();
-            }
-            else {
-                // Update existing entry
-                Key<TaskUser> taskUser = Key.create(TaskUser.class, user.getNickname());
-                Long id = Long.valueOf(taskId);
-                task = ObjectifyService.ofy()
-                        .load()
-                        .type(Task.class)
-                        .parent(taskUser)
-                        .id(id)
-                        .now();
-                task.setDescription(description);
-                task.setDueDate(dueDate);
-                task.setCompleted(completed);
-            }
+        if (StringUtils.isBlank(description)) {
+            err = "You must enter a description for the task.";
         }
-        catch (IllegalArgumentException e) {
-            err = e.getMessage();
+        else {
+            try {
+                if (StringUtils.isBlank(taskId)) {
+                    // Create new entry
+                    task = new TaskBuilder()
+                            .user(user.getNickname())
+                            .description(description)
+                            .completed(completed)
+                            .dueDate(dueDate)
+                            .build();
+                }
+                else {
+                    // Update existing entry
+                    Key<TaskUser> taskUser = Key.create(TaskUser.class, user.getNickname());
+                    Long id = Long.valueOf(taskId);
+                    task = ObjectifyService.ofy()
+                            .load()
+                            .type(Task.class)
+                            .parent(taskUser)
+                            .id(id)
+                            .now();
+                    task.setDescription(description);
+                    task.setDueDate(dueDate);
+                    task.setCompleted(completed);
+                }
+            }
+            catch (IllegalArgumentException e) {
+                err = e.getMessage();
+            }
         }
 
         if (StringUtils.isNotBlank(err)) {

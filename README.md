@@ -9,10 +9,12 @@
 - Redirect to login page when not authenticated
 
 ### How to use
-`gradle appengineRun`
+`gradle appengineRun`  
 Point your browser to `http://localhost:8888/`
 
 ### TODO (optional)
-- Visual cue (red color) for overdue tasks
-- Separate complete and incomplete tasks (toggle with link)
-- Automatic deploying from Travis-CI
+- ~~Visual cue (red color) for overdue tasks~~  
+- Separate complete and incomplete tasks (toggle with link)  
+- Automatic deploying from Travis-CI  
+- ~~Bootstrap~~  
+- ~~React~~  

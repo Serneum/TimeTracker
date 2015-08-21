@@ -20,8 +20,6 @@
 
     <%
         UserService userService = UserServiceFactory.getUserService();
-        Date now = new Date();
-        pageContext.setAttribute("today", now);
     %>
 
     <body>
@@ -65,7 +63,10 @@
                                 <tr>
                                     <td>${loop.index + 1}</td>
                                     <td>${task.description}</td>
-                                    <td>${task.formattedDueDate}</td>
+                                    <jsp:useBean id="now" class="java.util.Date"/>
+                                    <td style="color: ${task.dueDate lt now and not task.completed ? "red" : "green"}">
+                                        ${task.formattedDueDate}
+                                    </td>
                                     <td>${task.completed}</td>
                                     <td>
                                         <c:if test="${not inEditMode}">
@@ -82,14 +83,14 @@
             </div>
 
             <br/>
-            <c:if test="${not empty error}"><div>${error}</div></c:if>
+            <c:if test="${not empty error}"><div class="alert alert-danger">${error}</div></c:if>
 
             <form action="#" method="post">
                 <div class="panel panel-default">
                     <div class="panel-heading">${inEditMode ? "Edit" : "Create New"} Task</div>
                     <table class="table">
                         <tr>
-                            <td>Task:</td>
+                            <td>Description:</td>
                             <td><textarea name="description" rows="3" cols="60">${inEditMode ? editTask.description : ""}</textarea></td>
                         </tr>
                         <tr>
