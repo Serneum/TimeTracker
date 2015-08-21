@@ -12,6 +12,7 @@ import com.googlecode.objectify.cmd.Query;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.IOException;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -57,6 +58,7 @@ public class TasksServlet extends HttpServlet {
                 .ancestor(taskUser)
                 .order("dueDate")
                 .list();
+        Collections.sort(taskList, new TaskComparator());
 
         String error = getSanitizedValue(req, "error");
         if (StringUtils.isNotBlank(error)) {
