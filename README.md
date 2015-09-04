@@ -1,5 +1,4 @@
-[![Build Status](https://travis-ci.org/Serneum/onix-challenge.svg?branch=master)](https://travis-ci.org/Serneum/onix-challenge)
-# onix-challenge
+[![Build Status](https://travis-ci.org/Serneum/onix-challenge.svg?branch=master)](https://travis-ci.org/Serneum/gae-tasks)
 
 ### Functionality
 - Create tasks
