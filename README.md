@@ -3,17 +3,13 @@
 ### Functionality
 - Create tasks
 - Edit tasks
-- Log in with Google account
+- Log in
 - Log out
 - Redirect to login page when not authenticated
 
 ### How to use
-`gradle appengineRun`  
-Point your browser to `http://localhost:8888/`
-
-### TODO (optional)
-- ~~Visual cue (red color) for overdue tasks~~  
-- Separate complete and incomplete tasks (toggle with link)  
-- Automatic deploying from Travis-CI  
-- ~~Bootstrap~~  
-- ~~React~~  
+Assuming you have Tomcat set up in /Library/Tomcat, just run
+```
+gradle deploy
+```  
+Then, start Tomcat and point your browser to `http://localhost:8080/tasks`
