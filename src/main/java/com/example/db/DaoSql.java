@@ -4,8 +4,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import java.io.File;
 import java.sql.*;
+import java.util.ArrayList;
+import java.util.List;
 
-public class DaoSql {
+public abstract class DaoSql<T extends Persistent> {
 
     private static final String INSTALL_DIR = "/Library/Tomcat/webapps/ROOT";
     private static final String DB_DIR = System.getProperty("user.home") + "/.taskManager/db";
@@ -71,6 +73,107 @@ public class DaoSql {
             }
         }
     }
+
+    public List<T> restoreAll(String sql, String... args) {
+        List<T> resultList = new ArrayList<T>();
+
+        ResultSet rs = null;
+        Connection conn = null;
+        try {
+            conn = getConnection();
+
+            int col = 1;
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            for (String arg : args) {
+                stmt.setString(col++, arg);
+            }
+            rs = stmt.executeQuery();
+
+            T target;
+            while ((target = restore(rs)) != null) {
+                resultList.add(target);
+            }
+            conn.commit();
+            rs.close();
+        }
+        catch (Exception e) {
+            try {
+                StringBuilder errBuilder = new StringBuilder(e.getMessage()).append(": Error while executing SQL: ").append(sql)
+                        .append("\n").append(StringUtils.join(args, ", "));
+                System.err.println(errBuilder.toString());
+                e.printStackTrace();
+                if (conn != null && !conn.isClosed()) {
+                    conn.rollback();
+                }
+            }
+            catch (SQLException sqle) {
+                // Swallow
+            }
+
+        }
+        finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                }
+                catch (SQLException e) {
+                    System.err.println("Unable to close connection");
+                }
+            }
+        }
+
+        return resultList;
+    }
+
+    public T restore(String sql, String... args) {
+        T result = null;
+
+        ResultSet rs = null;
+        Connection conn = null;
+        try {
+            conn = getConnection();
+
+            int col = 1;
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            for (String arg : args) {
+                stmt.setString(col++, arg);
+            }
+            rs = stmt.executeQuery();
+
+            result = restore(rs);
+            conn.commit();
+            rs.close();
+        }
+        catch (Exception e) {
+            try {
+                StringBuilder errBuilder = new StringBuilder(e.getMessage()).append(": Error while executing SQL: ").append(sql)
+                        .append("\n").append(StringUtils.join(args, ", "));
+                System.err.println(errBuilder.toString());
+                e.printStackTrace();
+                if (conn != null && !conn.isClosed()) {
+                    conn.rollback();
+                }
+            }
+            catch (SQLException sqle) {
+                // Swallow
+            }
+
+        }
+        finally {
+            if (conn != null) {
+                try {
+                    conn.close();
+                }
+                catch (SQLException e) {
+                    System.err.println("Unable to close connection");
+                }
+            }
+        }
+
+        return result;
+    }
+
+    public abstract T restore(ResultSet rs);
 
     protected Connection getConnection()
     throws Exception{

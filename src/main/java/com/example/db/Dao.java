@@ -1,6 +1,8 @@
 package com.example.db;
 
-public interface Dao {
+import java.sql.ResultSet;
+
+public interface Dao<T> {
     public void createTableIfNeeded();
 
     public void insert(Persistent p);
@@ -8,4 +10,6 @@ public interface Dao {
     public void update(Persistent p);
 
     public void delete(Persistent p);
+
+    public T restore(ResultSet rs);
 }

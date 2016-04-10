@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.UUID;
 
-public class TaskUserDaoSql extends DaoSql implements Dao {
+public class TaskUserDaoSql extends DaoSql<TaskUser> implements Dao<TaskUser> {
 
     private static final String TABLE_NAME = "TASK_USER";
     private static final String[] COLUMN_DEFINITIONS = new String[] {
@@ -37,48 +37,7 @@ public class TaskUserDaoSql extends DaoSql implements Dao {
     }
 
     public TaskUser restoreForName(String name) {
-        TaskUser result = null;
-
-        ResultSet rs = null;
-        Connection conn = null;
-        try {
-            conn = getConnection();
-
-            PreparedStatement stmt = conn.prepareStatement(SELECT_FOR_NAME);
-            stmt.setString(1, name);
-            rs = stmt.executeQuery();
-
-            result = restore(rs);
-            conn.commit();
-            rs.close();
-        }
-        catch (Exception e) {
-            try {
-                StringBuilder errBuilder = new StringBuilder(e.getMessage()).append(": Error while executing SQL: ").append(SELECT_FOR_NAME)
-                        .append("\n").append(name);
-                System.err.println(errBuilder.toString());
-                e.printStackTrace();
-                if (conn != null && !conn.isClosed()) {
-                    conn.rollback();
-                }
-            }
-            catch (SQLException sqle) {
-                // Swallow
-            }
-
-        }
-        finally {
-            if (conn != null) {
-                try {
-                    conn.close();
-                }
-                catch (SQLException e) {
-                    System.err.println("Unable to close connection");
-                }
-            }
-        }
-
-        return result;
+        return super.restore(SELECT_FOR_NAME, name);
     }
 
     public void insert(Persistent p) {

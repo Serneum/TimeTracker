@@ -16,9 +16,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
-public class TaskDaoSql extends DaoSql implements Dao {
+public class TaskDaoSql extends DaoSql<Task> implements Dao<Task> {
 
-    private static final SimpleDateFormat dbFormat = new SimpleDateFormat("YYYY-MM-DD HH:MM:SS.SSS");
     private static final String TABLE_NAME = "TASK";
     private static final String[] COLUMN_DEFINITIONS = new String[] {
             "ID TEXT PRIMARY KEY NOT NULL",
@@ -48,97 +47,11 @@ public class TaskDaoSql extends DaoSql implements Dao {
     }
 
     public List<Task> restoreAllForUser(UUID id) {
-        List<Task> resultList = new ArrayList<Task>();
-
-        ResultSet rs = null;
-        Connection conn = null;
-        try {
-            conn = getConnection();
-
-            PreparedStatement stmt = conn.prepareStatement(SELECT_ALL_FOR_USER);
-            stmt.setString(1, id.toString());
-            rs = stmt.executeQuery();
-
-            Task target;
-            while ((target = restore(rs)) != null) {
-                resultList.add(target);
-            }
-            conn.commit();
-            rs.close();
-        }
-        catch (Exception e) {
-            try {
-                StringBuilder errBuilder = new StringBuilder(e.getMessage()).append(": Error while executing SQL: ").append(SELECT_ALL_FOR_USER)
-                        .append("\n").append(id.toString());
-                System.err.println(errBuilder.toString());
-                e.printStackTrace();
-                if (conn != null && !conn.isClosed()) {
-                    conn.rollback();
-                }
-            }
-            catch (SQLException sqle) {
-                // Swallow
-            }
-
-        }
-        finally {
-            if (conn != null) {
-                try {
-                    conn.close();
-                }
-                catch (SQLException e) {
-                    System.err.println("Unable to close connection");
-                }
-            }
-        }
-
-        return resultList;
+        return super.restoreAll(SELECT_ALL_FOR_USER, id.toString());
     }
 
     public Task restoreForIdAndUser(UUID id, UUID userId) {
-        Task result = null;
-
-        ResultSet rs = null;
-        Connection conn = null;
-        try {
-            conn = getConnection();
-
-            PreparedStatement stmt = conn.prepareStatement(SELECT_FOR_ID_AND_USER);
-            stmt.setString(1, id.toString());
-            stmt.setString(2, userId.toString());
-            rs = stmt.executeQuery();
-
-            result = restore(rs);
-            conn.commit();
-            rs.close();
-        }
-        catch (Exception e) {
-            try {
-                StringBuilder errBuilder = new StringBuilder(e.getMessage()).append(": Error while executing SQL: ").append(SELECT_FOR_ID_AND_USER)
-                        .append("\n").append(id.toString()).append(", ").append(userId.toString());
-                System.err.println(errBuilder.toString());
-                e.printStackTrace();
-                if (conn != null && !conn.isClosed()) {
-                    conn.rollback();
-                }
-            }
-            catch (SQLException sqle) {
-                // Swallow
-            }
-
-        }
-        finally {
-            if (conn != null) {
-                try {
-                    conn.close();
-                }
-                catch (SQLException e) {
-                    System.err.println("Unable to close connection");
-                }
-            }
-        }
-
-        return result;
+        return super.restore(SELECT_FOR_ID_AND_USER, id.toString(), userId.toString());
     }
 
     public void insert(Persistent p) {
