@@ -37,13 +37,7 @@ public abstract class DaoSql<T extends Persistent> {
 
         try {
             conn = getConnection();
-
-            int col = 1;
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            for (String arg : args) {
-                stmt.setString(col++, arg);
-            }
-
+            PreparedStatement stmt = createPreparedStatement(conn, sql, args);
             stmt.executeUpdate();
             conn.commit();
         }
@@ -81,12 +75,7 @@ public abstract class DaoSql<T extends Persistent> {
         Connection conn = null;
         try {
             conn = getConnection();
-
-            int col = 1;
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            for (String arg : args) {
-                stmt.setString(col++, arg);
-            }
+            PreparedStatement stmt = createPreparedStatement(conn, sql, args);
             rs = stmt.executeQuery();
 
             T target;
@@ -132,12 +121,7 @@ public abstract class DaoSql<T extends Persistent> {
         Connection conn = null;
         try {
             conn = getConnection();
-
-            int col = 1;
-            PreparedStatement stmt = conn.prepareStatement(sql);
-            for (String arg : args) {
-                stmt.setString(col++, arg);
-            }
+            PreparedStatement stmt = createPreparedStatement(conn, sql, args);
             rs = stmt.executeQuery();
 
             result = restore(rs);
@@ -186,5 +170,15 @@ public abstract class DaoSql<T extends Persistent> {
         Connection conn = DriverManager.getConnection(CONN_STRING);
         conn.setAutoCommit(false);
         return conn;
+    }
+
+    private PreparedStatement createPreparedStatement(Connection conn, String sql, String... args)
+    throws SQLException {
+        PreparedStatement stmt = conn.prepareStatement(sql);
+        int col = 1;
+        for (String arg : args) {
+            stmt.setString(col++, arg);
+        }
+        return stmt;
     }
 }
