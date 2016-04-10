@@ -2,7 +2,7 @@ package com.example.db;
 
 import java.sql.ResultSet;
 
-public interface Dao<T> {
+public interface Dao<T extends Persistent> {
     public void createTableIfNeeded();
 
     public void insert(Persistent p);
