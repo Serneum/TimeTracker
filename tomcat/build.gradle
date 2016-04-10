@@ -1,0 +1,47 @@
+apply plugin: 'war'
+
+def tomcatHome = "/Library/Tomcat"
+war.archiveName "ROOT.war"
+
+buildscript {
+    repositories {
+        mavenCentral()
+    }
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    compile 'org.xerial:sqlite-jdbc:3.8.11.2'
+    compile 'javax.servlet:javax.servlet-api:3.1.0'
+    compile 'javax.servlet:jstl:1.2'
+    compile 'commons-lang:commons-lang:2.6'
+    compile 'org.apache.commons:commons-lang3:3.4'
+    testCompile 'junit:junit:4.12'
+    testCompile 'org.mockito:mockito-all:1.10.19'
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ['src/main/java', 'src/web/java']
+        }
+    }
+}
+
+task copyDeps(type: Copy) {
+    from configurations.runtime
+    into 'lib'
+
+    from configurations.testCompile
+    into 'lib'
+}
+
+task deploy(type: Copy, dependsOn: "war") {
+    from war.archivePath
+    into "${tomcatHome}/webapps"
+}
+
+task cleanAll(dependsOn: ['clean', 'cleanCopyDeps'])
