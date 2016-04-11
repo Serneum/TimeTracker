@@ -88,7 +88,9 @@ public class TaskDaoSql extends DaoSql<Task> implements Dao<Task> {
 
                 UUID userId = UUID.fromString(rs.getString("USER"));
                 String userName = rs.getString("NAME");
+                String password = rs.getString("PASSWORD");
                 TaskUser user = new TaskUser(userId, userName);
+                user.setPassword(password);
 
                 result = new Task(id, user);
                 result.setDescription(description);

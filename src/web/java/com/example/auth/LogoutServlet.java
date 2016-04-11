@@ -18,7 +18,7 @@ public class LogoutServlet extends HttpServlet {
         // Invalidate current HTTP session.
         // Will call JAAS LoginModule logout() method
         request.getSession().invalidate();
-        response.sendRedirect(request.getContextPath() + "/tasks.jsp");
+        response.sendRedirect(request.getContextPath() + "/tasks");
 
     }
 

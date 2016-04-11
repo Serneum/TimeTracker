@@ -16,6 +16,7 @@ public class TaskUserDaoSql extends DaoSql<TaskUser> implements Dao<TaskUser> {
     private static final String TABLE_NAME = "TASK_USER";
     private static final String[] COLUMN_DEFINITIONS = new String[] {
             "ID TEXT PRIMARY KEY NOT NULL",
+            "PASSWORD TEXT NOT NULL",
             "NAME TEXT UNIQUE",
     };
     private static final String SELECT_FOR_NAME = "SELECT * FROM TASK_USER WHERE NAME=?";
@@ -64,7 +65,9 @@ public class TaskUserDaoSql extends DaoSql<TaskUser> implements Dao<TaskUser> {
             if (rs.next()) {
                 UUID id = UUID.fromString(rs.getString("ID"));
                 String name = rs.getString("NAME");
+                String password = rs.getString("PASSWORD");
                 result = new TaskUser(id, name);
+                result.setPassword(password);
             }
         }
         catch (Exception e) {

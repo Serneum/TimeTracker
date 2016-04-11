@@ -3,6 +3,7 @@ package com.example.auth;
 import com.example.domain.user.TaskUser;
 import com.example.domain.user.TaskUserDaoSql;
 import com.example.domain.user.TaskUserRole;
+import org.jasypt.util.password.BasicPasswordEncryptor;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -49,13 +50,16 @@ public class BasicLoginModule implements LoginModule {
             String password = String.valueOf(passwordCallback.getPassword());
 
             // Validate the credentials against the database
-            if (name != null && "admin".equals(name) && password != null && "admin".equals(password)) {
+            if (name != null && password != null) {
                 // Store the username
                 user = TaskUserDaoSql.getInstance().restoreForName(name);
                 if (user != null) {
-                    userGroups = new ArrayList<String>();
-                    userGroups.add("admin");
-                    return true;
+                    BasicPasswordEncryptor encryptor = new BasicPasswordEncryptor();
+                    if (encryptor.checkPassword(password, user.getPassword())) {
+                        userGroups = new ArrayList<String>();
+                        userGroups.add("admin");
+                        return true;
+                    }
                 }
             }
 
