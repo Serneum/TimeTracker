@@ -16,15 +16,17 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
-public class TasksServlet extends HttpServlet {
+public class TasksServlet extends BaseServlet {
     private static final Logger logger = Logger.getLogger(TasksServlet.class.getName());
 
     @Override
     public void doGet(HttpServletRequest req, HttpServletResponse resp)
     throws IOException, ServletException {
         TaskDaoSql dao = TaskDaoSql.getInstance();
-        TaskUser user = (TaskUser) req.getUserPrincipal();
+        HttpSession session = req.getSession();
+        TaskUser user = (TaskUser) session.getAttribute("user");
 
         String taskId = getSanitizedValue(req, "edit");
         if (StringUtils.isNotBlank(taskId)) {
@@ -56,15 +58,14 @@ public class TasksServlet extends HttpServlet {
     throws IOException {
         StringBuilder urlBuilder = new StringBuilder("/tasks");
         TaskDaoSql dao = TaskDaoSql.getInstance();
-        TaskUser user = (TaskUser) req.getUserPrincipal();
+        HttpSession session = req.getSession();
+        TaskUser user = (TaskUser) session.getAttribute("user");
 
         String err = "";
         String description = getSanitizedValue(req, "description");
         String dueDate = getSanitizedValue(req, "dueDate");
         boolean completed = getBoolean(req, "completed");
         String taskId = getSanitizedValue(req, "taskId");
-
-        System.err.println(dueDate);
 
         boolean isNew = false;
         Task task = null;
@@ -107,15 +108,5 @@ public class TasksServlet extends HttpServlet {
             dao.update(task);
         }
         resp.sendRedirect(urlBuilder.toString());
-    }
-
-    private String getSanitizedValue(HttpServletRequest req, String param) {
-        String val = req.getParameter(param);
-        return StringUtils.trimToEmpty(val);
-    }
-
-    private boolean getBoolean(HttpServletRequest req, String param) {
-        String val = getSanitizedValue(req, param);
-        return val.equals("1") || val.equals("yes") || val.equals("on") || Boolean.valueOf(val);
     }
 }

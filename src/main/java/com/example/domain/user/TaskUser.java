@@ -22,10 +22,8 @@ public class TaskUser extends Persistent implements Principal {
         this.password = new BasicPasswordEncryptor().encryptPassword(password);
     }
 
-    public TaskUser(String name) {
-        super();
-        this.id = UUID.randomUUID();
-        this.name = name;
+    public TaskUser(String name, String password) {
+        this(UUID.randomUUID(), name, password);
     }
 
     public void setName(String name) {

@@ -24,11 +24,11 @@
                     <ul class="nav navbar-nav navbar-right">
                         <li class="dropdown">
                             <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">
-                                Hello, ${fn:escapeXml(pageContext.request.userPrincipal.name)}!
+                                Hello, ${fn:escapeXml(sessionScope.user.name)}!
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
-                                <li><a href="${pageContext.request.contextPath}/logout">Sign Out</a></li>
+                                <li><a href="${pageContext.request.contextPath}/logout/">Sign Out</a></li>
                             </ul>
                         </li>
                     </ul>

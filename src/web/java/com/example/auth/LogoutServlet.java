@@ -11,14 +11,12 @@ public class LogoutServlet extends HttpServlet {
 
     private static final long serialVersionUID = 1L;
 
-    protected void doGet(HttpServletRequest request,
-                         HttpServletResponse response)
-            throws ServletException, IOException {
-
+    protected void doGet(HttpServletRequest request, HttpServletResponse response)
+    throws ServletException, IOException {
         // Invalidate current HTTP session.
         // Will call JAAS LoginModule logout() method
         request.getSession().invalidate();
-        response.sendRedirect(request.getContextPath() + "/tasks");
+        response.sendRedirect(request.getContextPath() + "/tasks/");
 
     }
 
