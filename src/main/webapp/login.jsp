@@ -35,7 +35,7 @@
                     </table>
                 </div>
                 <button type="submit" class="btn btn-primary">Log In</button>
-                <a type="button" class="btn btn-default" href="/register">Register</a>
+                <a type="button" class="btn btn-default" href="/register/">Register</a>
             </form>
         </div>
     </body>
