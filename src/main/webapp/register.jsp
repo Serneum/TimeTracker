@@ -1,5 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="com.example.domain.user.UserService" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="com.example.domain.tasks.Task" %>
 <%@ page import="java.util.Date" %>
