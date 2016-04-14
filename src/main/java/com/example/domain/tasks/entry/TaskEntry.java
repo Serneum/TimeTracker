@@ -28,7 +28,7 @@ public class TaskEntry extends Persistent {
 
     private String notes;
     private Date startDate;
-    private double duration;
+    private long duration;
 
     private TaskEntry() {
     }
@@ -137,11 +137,11 @@ public class TaskEntry extends Persistent {
         return result;
     }
 
-    public double getDuration() {
+    public long getDuration() {
         return duration;
     }
 
-    public void setDuration(double duration) {
+    public void setDuration(long duration) {
         this.duration = duration;
     }
 }

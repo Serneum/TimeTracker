@@ -13,7 +13,7 @@ public class TaskEntryBuilder {
     private UUID task;
     private String notes;
     private Date startDate;
-    private double duration;
+    private long duration;
 
     public TaskEntryBuilder() {
     }
@@ -43,7 +43,7 @@ public class TaskEntryBuilder {
         return this;
     }
 
-    public TaskEntryBuilder duration(double duration) {
+    public TaskEntryBuilder duration(long duration) {
         this.duration = duration;
         return this;
     }
@@ -85,7 +85,7 @@ public class TaskEntryBuilder {
         return startDate;
     }
 
-    public double getDuration() {
+    public long getDuration() {
         return duration;
     }
 }

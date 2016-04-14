@@ -99,7 +99,7 @@ public class TaskEntryDaoSql extends DaoSql<TaskEntry> implements Dao<TaskEntry>
                     startDate = TaskEntry.format.parse(startDateStr);
                 }
 
-                double duration = rs.getDouble("DURATION");
+                long duration = rs.getLong("DURATION");
 
                 TaskEntryBuilder builder = new TaskEntryBuilder().user(userId).project(projectId).task(taskId)
                         .notes(notes).startDate(startDate).duration(duration);
