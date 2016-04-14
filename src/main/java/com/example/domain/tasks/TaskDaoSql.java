@@ -14,16 +14,11 @@ public class TaskDaoSql extends DaoSql<Task> implements Dao<Task> {
     private static final String TABLE_NAME = "TASK";
     private static final String[] COLUMN_DEFINITIONS = new String[] {
             "ID TEXT PRIMARY KEY NOT NULL",
-            "USER TEXT NOT NULL",
-            "DESCRIPTION TEXT",
-            "DUE_DATE TEXT NOT NULL",
-            "COMPLETED TEXT NOT NULL",
-            "FOREIGN KEY(USER) REFERENCES TASK_USER(ID)"
+            "NAME TEXT"
     };
-    private static final String SELECT_ALL_FOR_USER = "SELECT * FROM TASK INNER JOIN TASK_USER AS TU ON TU.ID = USER WHERE USER=? ORDER BY DUE_DATE ASC";
-    private static final String SELECT_FOR_ID_AND_USER = "SELECT * FROM TASK INNER JOIN TASK_USER AS TU ON TU.ID = USER WHERE TASK.ID=? AND USER=? ORDER BY DUE_DATE ASC";
-    private static final String INSERT = "INSERT INTO TASK(ID, USER, DESCRIPTION, DUE_DATE, COMPLETED) VALUES(?, ?, ?, ?, ?)";
-    private static final String UPDATE = "UPDATE TASK SET DESCRIPTION=?, DUE_DATE=?, COMPLETED=? WHERE ID=?";
+    private static final String SELECT_ALL = "SELECT * FROM TASK ORDER BY NAME ASC";
+    private static final String INSERT = "INSERT INTO TASK(ID, NAME) VALUES(?, ?)";
+    private static final String UPDATE = "UPDATE TASK SET NAME=? WHERE ID=?";
     private static final String DELETE = "DELETE FROM TASK WHERE ID=?";
 
     private static TaskDaoSql instance;
@@ -39,28 +34,19 @@ public class TaskDaoSql extends DaoSql<Task> implements Dao<Task> {
         super.createTableIfNeeded(TABLE_NAME, COLUMN_DEFINITIONS);
     }
 
-    public List<Task> restoreAllForUser(UUID id) {
-        return super.restoreAll(SELECT_ALL_FOR_USER, id.toString());
-    }
-
-    public Task restoreForIdAndUser(UUID id, UUID userId) {
-        return super.restore(SELECT_FOR_ID_AND_USER, id.toString(), userId.toString());
+    public List<Task> restoreAll() {
+        return super.restoreAll(SELECT_ALL);
     }
 
     public void insert(Persistent p) {
         Task task = (Task) p;
         super.update(INSERT, task.getId().toString(),
-                             task.getUser().getId().toString(),
-                             task.getDescription(),
-                             task.getFormattedDueDate(),
-                             String.valueOf(task.isCompleted()));
+                             task.getName());
     }
 
     public void update(Persistent p) {
         Task task = (Task) p;
-        super.update(UPDATE, task.getDescription(),
-                             task.getFormattedDueDate(),
-                             String.valueOf(task.isCompleted()),
+        super.update(UPDATE, task.getName(),
                              task.getId().toString());
     }
 
@@ -75,20 +61,10 @@ public class TaskDaoSql extends DaoSql<Task> implements Dao<Task> {
         try {
             if (rs.next()) {
                 UUID id = UUID.fromString(rs.getString("ID"));
-                String description = rs.getString("DESCRIPTION");
-                String dueDate = rs.getString("DUE_DATE");
-                boolean completed = Boolean.valueOf(rs.getString("COMPLETED"));
+                String name = rs.getString("NAME");
 
-                UUID userId = UUID.fromString(rs.getString("USER"));
-                String userName = rs.getString("NAME");
-                String password = rs.getString("PASSWORD");
-                User user = new User(userId, userName);
-                user.setPassword(password);
-
-                result = new Task(id, user);
-                result.setDescription(description);
-                result.setDueDate(dueDate);
-                result.setCompleted(completed);
+                TaskBuilder builder = new TaskBuilder().name(name);
+                result = new Task(id, builder);
             }
         }
         catch (Exception e) {
