@@ -1,8 +1,8 @@
 package com.example.auth;
 
 import com.example.domain.tasks.BaseServlet;
-import com.example.domain.user.TaskUser;
-import com.example.domain.user.TaskUserDaoSql;
+import com.example.domain.user.User;
+import com.example.domain.user.UserDaoSql;
 import org.apache.commons.lang.StringUtils;
 
 import java.io.IOException;
@@ -11,7 +11,6 @@ import javax.security.auth.login.LoginContext;
 import javax.security.auth.login.LoginException;
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -45,7 +44,7 @@ public class LoginServlet extends BaseServlet {
                 context.login();
 
                 HttpSession session = req.getSession();
-                TaskUser user = TaskUserDaoSql.getInstance().restoreForName(username);
+                User user = UserDaoSql.getInstance().restoreForName(username);
                 session.setAttribute("user", user);
             }
             catch (LoginException e) {

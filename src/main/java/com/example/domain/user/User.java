@@ -6,23 +6,23 @@ import org.jasypt.util.password.BasicPasswordEncryptor;
 import java.security.Principal;
 import java.util.UUID;
 
-public class TaskUser extends Persistent implements Principal {
+public class User extends Persistent implements Principal {
 
     private String name;
     private String password;
 
-    public TaskUser(UUID id, String name) {
+    public User(UUID id, String name) {
         super();
         this.id = id;
         this.name = name;
     }
 
-    public TaskUser(UUID id, String name, String password) {
+    public User(UUID id, String name, String password) {
         this(id, name);
         this.password = new BasicPasswordEncryptor().encryptPassword(password);
     }
 
-    public TaskUser(String name, String password) {
+    public User(String name, String password) {
         this(UUID.randomUUID(), name, password);
     }
 

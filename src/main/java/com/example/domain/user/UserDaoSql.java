@@ -3,15 +3,11 @@ package com.example.domain.user;
 import com.example.db.Dao;
 import com.example.db.DaoSql;
 import com.example.db.Persistent;
-import org.apache.commons.lang3.StringUtils;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.UUID;
 
-public class TaskUserDaoSql extends DaoSql<TaskUser> implements Dao<TaskUser> {
+public class UserDaoSql extends DaoSql<User> implements Dao<User> {
 
     private static final String TABLE_NAME = "TASK_USER";
     private static final String[] COLUMN_DEFINITIONS = new String[] {
@@ -24,11 +20,11 @@ public class TaskUserDaoSql extends DaoSql<TaskUser> implements Dao<TaskUser> {
     private static final String UPDATE = "UPDATE TASK_USER SET NAME=?, PASSWORD=? WHERE ID=?";
     private static final String DELETE = "DELETE FROM TASK_USER WHERE ID=?";
 
-    private static TaskUserDaoSql instance;
+    private static UserDaoSql instance;
 
-    public static TaskUserDaoSql getInstance() {
+    public static UserDaoSql getInstance() {
         if (instance == null) {
-            instance = new TaskUserDaoSql();
+            instance = new UserDaoSql();
         }
         return instance;
     }
@@ -37,38 +33,38 @@ public class TaskUserDaoSql extends DaoSql<TaskUser> implements Dao<TaskUser> {
         super.createTableIfNeeded(TABLE_NAME, COLUMN_DEFINITIONS);
     }
 
-    public TaskUser restoreForName(String name) {
+    public User restoreForName(String name) {
         return super.restore(SELECT_FOR_NAME, name);
     }
 
     public void insert(Persistent p) {
-        TaskUser user = (TaskUser) p;
+        User user = (User) p;
         super.update(INSERT, user.getId().toString(),
                              user.getName(),
                              user.getPassword());
     }
 
     public void update(Persistent p) {
-        TaskUser user = (TaskUser) p;
+        User user = (User) p;
         super.update(UPDATE, user.getName(),
                              user.getPassword(),
                              user.getId().toString());
     }
 
     public void delete(Persistent p) {
-        TaskUser user = (TaskUser) p;
+        User user = (User) p;
         super.update(DELETE, user.getId().toString());
     }
 
-    public TaskUser restore(ResultSet rs) {
-        TaskUser result = null;
+    public User restore(ResultSet rs) {
+        User result = null;
 
         try {
             if (rs.next()) {
                 UUID id = UUID.fromString(rs.getString("ID"));
                 String name = rs.getString("NAME");
                 String password = rs.getString("PASSWORD");
-                result = new TaskUser(id, name);
+                result = new User(id, name);
                 result.setPassword(password);
             }
         }

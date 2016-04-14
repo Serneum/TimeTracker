@@ -1,14 +1,12 @@
 package com.example.auth;
 
 import com.example.domain.tasks.BaseServlet;
-import com.example.domain.user.TaskUser;
-import com.example.domain.user.TaskUserDaoSql;
+import com.example.domain.user.User;
+import com.example.domain.user.UserDaoSql;
 import org.apache.commons.lang.StringUtils;
-import org.jasypt.util.password.BasicPasswordEncryptor;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -41,11 +39,11 @@ public class RegistrationServlet extends BaseServlet {
             err = "Passwords do not match.";
         }
         else {
-            TaskUserDaoSql userDaoSql = TaskUserDaoSql.getInstance();
-            TaskUser existingUser = userDaoSql.restoreForName(username);
+            UserDaoSql userDaoSql = UserDaoSql.getInstance();
+            User existingUser = userDaoSql.restoreForName(username);
 
             if (existingUser == null) {
-                TaskUser user = new TaskUser(username, password);
+                User user = new User(username, password);
                 userDaoSql.insert(user);
 
                 HttpSession session = req.getSession();

@@ -1,4 +1,4 @@
-package com.example.domain.tasks;
+package com.example.domain.customer;
 
 import com.example.db.Dao;
 import com.example.db.DaoSql;
@@ -9,7 +9,7 @@ import java.sql.ResultSet;
 import java.util.List;
 import java.util.UUID;
 
-public class TaskDaoSql extends DaoSql<Task> implements Dao<Task> {
+public class CustomerDaoSql extends DaoSql<Customer> implements Dao<Customer> {
 
     private static final String TABLE_NAME = "TASK";
     private static final String[] COLUMN_DEFINITIONS = new String[] {
@@ -26,11 +26,11 @@ public class TaskDaoSql extends DaoSql<Task> implements Dao<Task> {
     private static final String UPDATE = "UPDATE TASK SET DESCRIPTION=?, DUE_DATE=?, COMPLETED=? WHERE ID=?";
     private static final String DELETE = "DELETE FROM TASK WHERE ID=?";
 
-    private static TaskDaoSql instance;
+    private static CustomerDaoSql instance;
 
-    public static TaskDaoSql getInstance() {
+    public static CustomerDaoSql getInstance() {
         if (instance == null) {
-            instance = new TaskDaoSql();
+            instance = new CustomerDaoSql();
         }
         return instance;
     }
@@ -39,38 +39,38 @@ public class TaskDaoSql extends DaoSql<Task> implements Dao<Task> {
         super.createTableIfNeeded(TABLE_NAME, COLUMN_DEFINITIONS);
     }
 
-    public List<Task> restoreAllForUser(UUID id) {
+    public List<Customer> restoreAllForUser(UUID id) {
         return super.restoreAll(SELECT_ALL_FOR_USER, id.toString());
     }
 
-    public Task restoreForIdAndUser(UUID id, UUID userId) {
+    public Customer restoreForIdAndUser(UUID id, UUID userId) {
         return super.restore(SELECT_FOR_ID_AND_USER, id.toString(), userId.toString());
     }
 
     public void insert(Persistent p) {
-        Task task = (Task) p;
-        super.update(INSERT, task.getId().toString(),
-                             task.getUser().getId().toString(),
-                             task.getDescription(),
-                             task.getFormattedDueDate(),
-                             String.valueOf(task.isCompleted()));
+        Customer customer = (Customer) p;
+        super.update(INSERT, customer.getId().toString(),
+                             customer.getUser().getId().toString(),
+                             customer.getDescription(),
+                             customer.getFormattedDueDate(),
+                             String.valueOf(customer.isCompleted()));
     }
 
     public void update(Persistent p) {
-        Task task = (Task) p;
-        super.update(UPDATE, task.getDescription(),
-                             task.getFormattedDueDate(),
-                             String.valueOf(task.isCompleted()),
-                             task.getId().toString());
+        Customer customer = (Customer) p;
+        super.update(UPDATE, customer.getDescription(),
+                             customer.getFormattedDueDate(),
+                             String.valueOf(customer.isCompleted()),
+                             customer.getId().toString());
     }
 
     public void delete(Persistent p) {
-        Task task = (Task) p;
-        super.update(DELETE, task.getId().toString());
+        Customer customer = (Customer) p;
+        super.update(DELETE, customer.getId().toString());
     }
 
-    public Task restore(ResultSet rs) {
-        Task result = null;
+    public Customer restore(ResultSet rs) {
+        Customer result = null;
 
         try {
             if (rs.next()) {
@@ -85,7 +85,7 @@ public class TaskDaoSql extends DaoSql<Task> implements Dao<Task> {
                 User user = new User(userId, userName);
                 user.setPassword(password);
 
-                result = new Task(id, user);
+                result = new Customer(id, user);
                 result.setDescription(description);
                 result.setDueDate(dueDate);
                 result.setCompleted(completed);

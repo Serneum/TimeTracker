@@ -1,7 +1,7 @@
 package com.example.domain.servlet;
 
 import com.example.domain.tasks.TaskDaoSql;
-import com.example.domain.user.TaskUserDaoSql;
+import com.example.domain.user.UserDaoSql;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
@@ -23,7 +23,7 @@ public class InitServlet extends HttpServlet {
     @Override
     public void init()
     throws ServletException {
-        TaskUserDaoSql taskUserDao = new TaskUserDaoSql();
+        UserDaoSql taskUserDao = new UserDaoSql();
         TaskDaoSql taskDao = new TaskDaoSql();
 
         taskUserDao.createTableIfNeeded();

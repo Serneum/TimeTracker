@@ -10,9 +10,9 @@ import java.util.List;
 public abstract class DaoSql<T extends Persistent> {
 
     private static final String INSTALL_DIR = "/Library/Tomcat/webapps/ROOT";
-    private static final String DB_DIR = System.getProperty("user.home") + "/.taskManager/db";
+    private static final String DB_DIR = System.getProperty("user.home") + "/.timeTracker/db";
     private static final String SQLITE_CLASS = "org.sqlite.JDBC";
-    private static final String CONN_STRING = "jdbc:sqlite:" + DB_DIR + "/taskManager.db";
+    private static final String CONN_STRING = "jdbc:sqlite:" + DB_DIR + "/timeTracker.db";
 
     public DaoSql() {
     }

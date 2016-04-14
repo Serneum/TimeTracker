@@ -1,13 +1,12 @@
 package com.example.auth;
 
-import com.example.domain.user.TaskUser;
+import com.example.domain.user.User;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.security.Principal;
 
 public class AuthenticationFilter implements Filter {
 
@@ -20,7 +19,7 @@ public class AuthenticationFilter implements Filter {
         HttpServletRequest httpRequest = (HttpServletRequest) req;
         HttpServletResponse httpResponse = (HttpServletResponse) resp;
         HttpSession session = ((HttpServletRequest) req).getSession();
-        TaskUser user = (TaskUser) session.getAttribute("user");
+        User user = (User) session.getAttribute("user");
 
         if (user == null && !httpRequest.getRequestURI().startsWith("/register/")) {
             httpRequest.getRequestDispatcher(httpRequest.getContextPath() + "/login/").forward(req, resp);

@@ -1,6 +1,6 @@
 package com.example.domain.tasks;
 
-import com.example.domain.user.TaskUser;
+import com.example.domain.user.User;
 
 import org.apache.commons.lang.StringUtils;
 
@@ -13,7 +13,6 @@ import java.util.logging.Logger;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
-import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -26,7 +25,7 @@ public class TasksServlet extends BaseServlet {
     throws IOException, ServletException {
         TaskDaoSql dao = TaskDaoSql.getInstance();
         HttpSession session = req.getSession();
-        TaskUser user = (TaskUser) session.getAttribute("user");
+        User user = (User) session.getAttribute("user");
 
         String taskId = getSanitizedValue(req, "edit");
         if (StringUtils.isNotBlank(taskId)) {
@@ -59,7 +58,7 @@ public class TasksServlet extends BaseServlet {
         StringBuilder urlBuilder = new StringBuilder("/tasks");
         TaskDaoSql dao = TaskDaoSql.getInstance();
         HttpSession session = req.getSession();
-        TaskUser user = (TaskUser) session.getAttribute("user");
+        User user = (User) session.getAttribute("user");
 
         String err = "";
         String description = getSanitizedValue(req, "description");

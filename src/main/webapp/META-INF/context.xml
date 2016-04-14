@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Context>
     <Realm className="org.apache.catalina.realm.JAASRealm"
-           appName="TaskManager"
-           userClassNames="com.example.domain.user.TaskUser"
+           appName="TimeTracker"
+           userClassNames="com.example.domain.user.User"
            roleClassNames="com.example.domain.user.TaskUserRole" />
 </Context>
