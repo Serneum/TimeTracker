@@ -13,6 +13,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
+import java.util.concurrent.TimeUnit;
 
 public class TaskEntry extends Persistent {
     static public SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
@@ -139,6 +140,34 @@ public class TaskEntry extends Persistent {
 
     public long getDuration() {
         return duration;
+    }
+
+    public String getFormattedDuration() {
+        long tempDuration = duration;
+        if (startDate != null) {
+            Date now = new Date();
+            tempDuration += (now.getTime() - startDate.getTime());
+        }
+
+        int days = (int) TimeUnit.MILLISECONDS.toDays(tempDuration);
+        long hours = TimeUnit.MILLISECONDS.toHours(tempDuration) - (days * 24);
+        long minutes = TimeUnit.MILLISECONDS.toMinutes(tempDuration) - (hours * 60);
+        long seconds = TimeUnit.MILLISECONDS.toSeconds(tempDuration) - (minutes * 60);
+
+        StringBuilder durationBuilder = new StringBuilder();
+        if (days > 0) {
+            durationBuilder.append(days).append("d ");
+        }
+        if (hours > 0) {
+            durationBuilder.append(hours).append("h ");
+        }
+        if (minutes > 0) {
+            durationBuilder.append(minutes).append("m ");
+        }
+        if (seconds > 0) {
+            durationBuilder.append(seconds).append("s");
+        }
+        return durationBuilder.toString();
     }
 
     public void setDuration(long duration) {

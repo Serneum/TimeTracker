@@ -62,7 +62,7 @@
                             <td>${loop.index + 1}</td>
                             <td>${entry.task.name} (${entry.project.name})</td>
                             <td>${entry.notes}</td>
-                            <td>${entry.duration}</td>
+                            <td>${entry.formattedDuration}</td>
                             <td>
                                 <c:if test="${not inEditMode}">
                                     <c:choose>
