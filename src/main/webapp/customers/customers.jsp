@@ -85,27 +85,19 @@
                         <tr>
                             <td>Customer:</td>
                             <td>
-                                <c:choose>
-                                    <c:when test="${not inEditMode}">
-                                        <select name="customer">
-                                            <c:forEach items="${customerList}" var="customer">
-                                                <option value="${customer.id}">${customer.name}</option>
-                                            </c:forEach>
-                                        </select>
-                                    </c:when>
-                                    <c:otherwise>
-                                        ${editProject.customer.name}
-                                    </c:otherwise>
-                                </c:choose>
+                                <select name="customer">
+                                    <c:forEach items="${customerList}" var="customer">
+                                        <option value="${customer.id}">${customer.name}</option>
+                                    </c:forEach>
+                                </select>
                             </td>
                         </tr>
                         <tr>
                             <td>Name:</td>
-                            <td><input type="text" name="name" value="${inEditMode ? editProject.name : ""}"></td>
+                            <td><input type="test" name="name" value="${inEditMode ? editProject.name : ""}"></td>
                         </tr>
                         <c:if test="${inEditMode}">
                             <input type="hidden" name="projectId" value="${editProject.id}">
-                            <input type="hidden" name="customer" value="${editProject.customer.id}">
                         </c:if>
                     </table>
                 </div>
