@@ -96,20 +96,34 @@
             <table class="table">
                 <td>Project:</td>
                 <td>
-                    <select name="project">
-                        <c:forEach items="${projectList}" var="project">
-                            <option value="${project.id}">${project.name}</option>
-                        </c:forEach>
-                    </select>
+                    <c:choose>
+                        <c:when test="${not inEditMode}">
+                            <select name="project">
+                                <c:forEach items="${projectList}" var="project">
+                                    <option value="${project.id}">${project.name}</option>
+                                </c:forEach>
+                            </select>
+                        </c:when>
+                        <c:otherwise>
+                            ${editEntry.project.name}
+                        </c:otherwise>
+                    </c:choose>
                 </td>
                 <tr>
                     <td>Task:</td>
                     <td>
-                        <select name="task">
-                            <c:forEach items="${taskList}" var="task">
-                                <option value="${task.id}">${task.name}</option>
-                            </c:forEach>
-                        </select>
+                        <c:choose>
+                            <c:when test="${not inEditMode}">
+                                <select name="task">
+                                    <c:forEach items="${taskList}" var="task">
+                                        <option value="${task.id}">${task.name}</option>
+                                    </c:forEach>
+                                </select>
+                            </c:when>
+                            <c:otherwise>
+                                ${editEntry.task.name}
+                            </c:otherwise>
+                        </c:choose>
                     </td>
                 </tr>
                 <tr>
@@ -118,6 +132,8 @@
                 </tr>
                 <c:if test="${inEditMode}">
                     <input type="hidden" name="entryId" value="${editEntry.id}">
+                    <input type="hidden" name="project" value="${editEntry.project.id}">
+                    <input type="hidden" name="task" value="${editEntry.task.id}">
                 </c:if>
             </table>
         </div>

@@ -33,6 +33,7 @@ public class TaskEntryDaoSql extends DaoSql<TaskEntry> implements Dao<TaskEntry>
     };
     private static final String SELECT_ALL_FOR_USER = "SELECT * FROM TASK_ENTRY INNER JOIN USER U ON U.ID = USER WHERE USER=?";
     private static final String SELECT_FOR_ID_AND_USER = "SELECT * FROM TASK_ENTRY TE INNER JOIN USER U ON U.ID = USER WHERE TE.ID=? AND USER=?";
+    private static final String SELECT_FOR_PROJECT_TASK_AND_USER = "SELECT * FROM TASK_ENTRY WHERE PROJECT=? AND TASK=? AND USER=?";
     private static final String INSERT = "INSERT INTO TASK_ENTRY(ID, USER, PROJECT, TASK, NOTES, START_DATE, DURATION) VALUES(?, ?, ?, ?, ?, ?, ?)";
     private static final String UPDATE = "UPDATE TASK_ENTRY SET NOTES=?, START_DATE=?, DURATION=? WHERE ID=?";
     private static final String DELETE = "DELETE FROM TASK_ENTRY WHERE ID=?";
@@ -56,6 +57,10 @@ public class TaskEntryDaoSql extends DaoSql<TaskEntry> implements Dao<TaskEntry>
 
     public TaskEntry restoreForIdAndUser(UUID id, UUID userId) {
         return super.restore(SELECT_FOR_ID_AND_USER, id.toString(), userId.toString());
+    }
+
+    public TaskEntry restoreForProjectTaskAndUser(UUID projectId, UUID taskId, UUID userId) {
+        return super.restore(SELECT_FOR_PROJECT_TASK_AND_USER, projectId.toString(), taskId.toString(), userId.toString());
     }
 
     public void insert(Persistent p) {

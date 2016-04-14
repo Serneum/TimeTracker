@@ -105,14 +105,21 @@ public class TimeEntryServlet extends BaseServlet {
         else {
             try {
                 if (StringUtils.isBlank(entryId)) {
-                    // Create new entry
-                    taskEntry = new TaskEntryBuilder()
-                            .user(user.getId())
-                            .project(UUID.fromString(projectId))
-                            .task(UUID.fromString(taskId))
-                            .notes(notes)
-                            .build();
-                    isNew = true;
+                    TaskEntry existingEntry = dao.restoreForProjectTaskAndUser(UUID.fromString(projectId),
+                            UUID.fromString(taskId), user.getId());
+                    if (existingEntry == null) {
+                        // Create new entry
+                        taskEntry = new TaskEntryBuilder()
+                                .user(user.getId())
+                                .project(UUID.fromString(projectId))
+                                .task(UUID.fromString(taskId))
+                                .notes(notes)
+                                .build();
+                        isNew = true;
+                    }
+                    else {
+                        err = "A time entry already exists for project '" + projectId + "' and task '" + taskId + "'.";
+                    }
                 }
                 else {
                     // Update existing entry
