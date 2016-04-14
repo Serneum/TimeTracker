@@ -9,17 +9,17 @@ import java.util.UUID;
 
 public class UserDaoSql extends DaoSql<User> implements Dao<User> {
 
-    private static final String TABLE_NAME = "TASK_USER";
+    private static final String TABLE_NAME = "USER";
     private static final String[] COLUMN_DEFINITIONS = new String[] {
             "ID TEXT PRIMARY KEY NOT NULL",
             "PASSWORD TEXT NOT NULL",
             "NAME TEXT UNIQUE",
     };
-    private static final String SELECT_FOR_NAME = "SELECT * FROM TASK_USER WHERE NAME=?";
-    private static final String SELECT_FOR_ID = "SELECT * FROM TASK_USER WHERE ID=?";
-    private static final String INSERT = "INSERT INTO TASK_USER(ID, NAME, PASSWORD) VALUES(?, ?, ?)";
-    private static final String UPDATE = "UPDATE TASK_USER SET NAME=?, PASSWORD=? WHERE ID=?";
-    private static final String DELETE = "DELETE FROM TASK_USER WHERE ID=?";
+    private static final String SELECT_FOR_NAME = "SELECT * FROM USER WHERE NAME=?";
+    private static final String SELECT_FOR_ID = "SELECT * FROM USER WHERE ID=?";
+    private static final String INSERT = "INSERT INTO USER(ID, NAME, PASSWORD) VALUES(?, ?, ?)";
+    private static final String UPDATE = "UPDATE USER SET NAME=?, PASSWORD=? WHERE ID=?";
+    private static final String DELETE = "DELETE FROM USER WHERE ID=?";
 
     private static UserDaoSql instance;
 

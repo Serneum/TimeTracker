@@ -31,10 +31,13 @@
                             <td>Password:</td>
                             <td><input type="password" name="password"/></td>
                         </tr>
+                        <tr>
+                            <td>Confirm Password:</td>
+                            <td><input type="password" name="passwordConfirm"/></td>
+                        </tr>
                     </table>
                 </div>
-                <button type="submit" class="btn btn-primary">Log In</button>
-                <a type="button" class="btn btn-default" href="/register/">Register</a>
+                <button type="submit" class="btn btn-primary">Register</button>
             </form>
         </div>
     </body>

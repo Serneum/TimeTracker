@@ -29,7 +29,7 @@ public class TasksServlet extends BaseServlet {
 
         String taskId = getSanitizedValue(req, "edit");
         if (StringUtils.isNotBlank(taskId)) {
-            Task editTask = dao.restoreForIdAndUser(UUID.fromString(taskId), user.getId());
+            Task editTask = null;//dao.restoreForIdAndUser(UUID.fromString(taskId), user.getId());
             if (editTask != null) {
                 req.setAttribute("inEditMode", true);
                 req.setAttribute("editTask", editTask);
@@ -39,7 +39,7 @@ public class TasksServlet extends BaseServlet {
             }
         }
 
-        List<Task> taskList = dao.restoreAllForUser(user.getId());
+        List<Task> taskList = null; //dao.restoreAllForUser(user.getId());
         Collections.sort(taskList, new TaskComparator());
 
         String error = getSanitizedValue(req, "error");
@@ -75,20 +75,20 @@ public class TasksServlet extends BaseServlet {
             try {
                 if (StringUtils.isBlank(taskId)) {
                     // Create new entry
-                    task = new TaskBuilder()
-                            .user(user)
-                            .description(description)
-                            .completed(completed)
-                            .dueDate(dueDate)
-                            .build();
+//                    task = new TaskBuilder()
+//                            .user(user)
+//                            .description(description)
+//                            .completed(completed)
+//                            .dueDate(dueDate)
+//                            .build();
                     isNew = true;
                 }
                 else {
                     // Update existing entry
-                    task = dao.restoreForIdAndUser(UUID.fromString(taskId), user.getId());
-                    task.setDescription(description);
-                    task.setDueDate(dueDate);
-                    task.setCompleted(completed);
+//                    task = dao.restoreForIdAndUser(UUID.fromString(taskId), user.getId());
+//                    task.setDescription(description);
+//                    task.setDueDate(dueDate);
+//                    task.setCompleted(completed);
                 }
             }
             catch (IllegalArgumentException e) {
