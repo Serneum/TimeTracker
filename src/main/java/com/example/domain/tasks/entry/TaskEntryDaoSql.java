@@ -3,28 +3,38 @@ package com.example.domain.tasks.entry;
 import com.example.db.Dao;
 import com.example.db.DaoSql;
 import com.example.db.Persistent;
+import com.example.domain.project.Project;
+import com.example.domain.project.ProjectBuilder;
+import com.example.domain.tasks.Task;
+import com.example.domain.tasks.TaskBuilder;
 import com.example.domain.user.User;
 
 import java.sql.ResultSet;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
 public class TaskEntryDaoSql extends DaoSql<TaskEntry> implements Dao<TaskEntry> {
 
-    private static final String TABLE_NAME = "TASK";
+    private static final String TABLE_NAME = "TASK_ENTRY";
     private static final String[] COLUMN_DEFINITIONS = new String[] {
-            "ID TEXT PRIMARY KEY NOT NULL",
+            "ID TEXT NOT NULL",
             "USER TEXT NOT NULL",
-            "DESCRIPTION TEXT",
-            "DUE_DATE TEXT NOT NULL",
-            "COMPLETED TEXT NOT NULL",
-            "FOREIGN KEY(USER) REFERENCES TASK_USER(ID)"
+            "PROJECT TEXT NOT NULL",
+            "TASK TEXT NOT NULL",
+            "NOTES TEXT",
+            "START_DATE TEXT",
+            "DURATION REAL",
+            "FOREIGN KEY(USER) REFERENCES USER(ID)",
+            "FOREIGN KEY(PROJECT) REFERENCES PROJECT(ID)",
+            "FOREIGN KEY(TASK) REFERENCES TASK(ID)",
+            "PRIMARY KEY(USER, PROJECT, TASK)"
     };
-    private static final String SELECT_ALL_FOR_USER = "SELECT * FROM TASK INNER JOIN TASK_USER AS TU ON TU.ID = USER WHERE USER=? ORDER BY DUE_DATE ASC";
-    private static final String SELECT_FOR_ID_AND_USER = "SELECT * FROM TASK INNER JOIN TASK_USER AS TU ON TU.ID = USER WHERE TASK.ID=? AND USER=? ORDER BY DUE_DATE ASC";
-    private static final String INSERT = "INSERT INTO TASK(ID, USER, DESCRIPTION, DUE_DATE, COMPLETED) VALUES(?, ?, ?, ?, ?)";
-    private static final String UPDATE = "UPDATE TASK SET DESCRIPTION=?, DUE_DATE=?, COMPLETED=? WHERE ID=?";
-    private static final String DELETE = "DELETE FROM TASK WHERE ID=?";
+    private static final String SELECT_ALL_FOR_USER = "SELECT * FROM TASK_ENTRY INNER JOIN USER U ON U.ID = USER WHERE USER=?";
+    private static final String SELECT_FOR_ID_AND_USER = "SELECT * FROM TASK_ENTRY INNER JOIN USER U ON U.ID = USER WHERE TASK.ID=? AND USER=?";
+    private static final String INSERT = "INSERT INTO TASK_ENTRY(ID, USER, PROJECT, TASK, NOTES, START_DATE, DURATION) VALUES(?, ?, ?, ?, ?, ?, ?)";
+    private static final String UPDATE = "UPDATE TASK_ENTRY SET NOTES=?, START_DATE=NULL, DURATION=? WHERE ID=?";
+    private static final String DELETE = "DELETE FROM TASK_ENTRY WHERE ID=?";
 
     private static TaskEntryDaoSql instance;
 
@@ -50,17 +60,18 @@ public class TaskEntryDaoSql extends DaoSql<TaskEntry> implements Dao<TaskEntry>
     public void insert(Persistent p) {
         TaskEntry taskEntry = (TaskEntry) p;
         super.update(INSERT, taskEntry.getId().toString(),
-                             taskEntry.getUser().getId().toString(),
-                             taskEntry.getDescription(),
-                             taskEntry.getFormattedDueDate(),
-                             String.valueOf(taskEntry.isCompleted()));
+                             taskEntry.getUserId().toString(),
+                             taskEntry.getProjectId().toString(),
+                             taskEntry.getTaskId().toString(),
+                             taskEntry.getNotes(),
+                             taskEntry.getFormattedStartDate(),
+                             String.valueOf(taskEntry.getDuration()));
     }
 
     public void update(Persistent p) {
         TaskEntry taskEntry = (TaskEntry) p;
-        super.update(UPDATE, taskEntry.getDescription(),
-                             taskEntry.getFormattedDueDate(),
-                             String.valueOf(taskEntry.isCompleted()),
+        super.update(UPDATE, taskEntry.getNotes(),
+                             String.valueOf(taskEntry.getDuration()),
                              taskEntry.getId().toString());
     }
 
@@ -75,24 +86,21 @@ public class TaskEntryDaoSql extends DaoSql<TaskEntry> implements Dao<TaskEntry>
         try {
             if (rs.next()) {
                 UUID id = UUID.fromString(rs.getString("ID"));
-                String description = rs.getString("DESCRIPTION");
-                String dueDate = rs.getString("DUE_DATE");
-                boolean completed = Boolean.valueOf(rs.getString("COMPLETED"));
-
                 UUID userId = UUID.fromString(rs.getString("USER"));
-                String userName = rs.getString("NAME");
-                String password = rs.getString("PASSWORD");
-                User user = new User(userId, userName);
-                user.setPassword(password);
+                UUID projectId = UUID.fromString(rs.getString("PROJECT"));
+                UUID taskId = UUID.fromString(rs.getString("TASK"));
+                String notes = rs.getString("NOTES");
+                Date startDate = rs.getDate("START_DATE");
+                double duration = rs.getDouble("DURATION");
 
-                result = new TaskEntry(id, user);
-                result.setDescription(description);
-                result.setDueDate(dueDate);
-                result.setCompleted(completed);
+                TaskEntryBuilder builder = new TaskEntryBuilder().user(userId).project(projectId).task(taskId)
+                        .notes(notes).startDate(startDate).duration(duration);
+                result = new TaskEntry(id, builder);
+
             }
         }
         catch (Exception e) {
-            System.err.println("Error restoring task from database: " + e);
+            System.err.println("Error restoring task entry from database: " + e);
             e.printStackTrace();
         }
 

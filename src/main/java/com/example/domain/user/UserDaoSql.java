@@ -16,6 +16,7 @@ public class UserDaoSql extends DaoSql<User> implements Dao<User> {
             "NAME TEXT UNIQUE",
     };
     private static final String SELECT_FOR_NAME = "SELECT * FROM TASK_USER WHERE NAME=?";
+    private static final String SELECT_FOR_ID = "SELECT * FROM TASK_USER WHERE ID=?";
     private static final String INSERT = "INSERT INTO TASK_USER(ID, NAME, PASSWORD) VALUES(?, ?, ?)";
     private static final String UPDATE = "UPDATE TASK_USER SET NAME=?, PASSWORD=? WHERE ID=?";
     private static final String DELETE = "DELETE FROM TASK_USER WHERE ID=?";
@@ -31,6 +32,10 @@ public class UserDaoSql extends DaoSql<User> implements Dao<User> {
 
     public void createTableIfNeeded() {
         super.createTableIfNeeded(TABLE_NAME, COLUMN_DEFINITIONS);
+    }
+
+    public User restoreForId(UUID id) {
+        return super.restore(SELECT_FOR_ID, id.toString());
     }
 
     public User restoreForName(String name) {

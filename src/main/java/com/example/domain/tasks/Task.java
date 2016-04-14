@@ -15,7 +15,7 @@ public class Task extends Persistent {
     private Task() {
     }
 
-    Task(UUID id, TaskBuilder builder) {
+    public Task(UUID id, TaskBuilder builder) {
         this(builder);
         this.id = id;
     }
@@ -27,7 +27,7 @@ public class Task extends Persistent {
     }
 
     public String getName() {
-        return this.name;
+        return name;
     }
 
     public void setName(String name) {

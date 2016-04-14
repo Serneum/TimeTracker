@@ -2,8 +2,11 @@ package com.example.domain.tasks.entry;
 
 import com.example.db.Persistent;
 import com.example.domain.project.Project;
+import com.example.domain.project.ProjectDaoSql;
 import com.example.domain.tasks.Task;
+import com.example.domain.tasks.TaskDaoSql;
 import com.example.domain.user.User;
+import com.example.domain.user.UserDaoSql;
 import org.apache.commons.lang.StringUtils;
 
 import java.text.ParseException;
@@ -14,12 +17,18 @@ import java.util.UUID;
 public class TaskEntry extends Persistent {
     static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
+    private UUID userId;
     private User user;
+
+    private UUID projectId;
     private Project project;
+
+    private UUID taskId;
     private Task task;
+
     private String notes;
     private Date startDate;
-    private Date endDate;
+    private double duration;
 
     private TaskEntry() {
     }
@@ -32,73 +41,107 @@ public class TaskEntry extends Persistent {
     public TaskEntry(TaskEntryBuilder builder) {
         this();
         this.id = UUID.randomUUID();
+        setUser(builder.getUser());
+        setProject(builder.getProject());
+        setTask(builder.getTask());
+        setNotes(builder.getNotes());
+        setStartDate(builder.getStartDate());
+        setDuration(builder.getDuration());
+    }
+
+    public UUID getUserId() {
+        return userId;
     }
 
     public User getUser() {
+        if (user == null) {
+            synchronized (this) {
+                if (user == null) {
+                    user = UserDaoSql.getInstance().restoreForId(userId);
+                }
+            }
+        }
         return user;
     }
 
+    private void setUser(UUID userId) {
+        this.user = null;
+        this.userId = userId;
+    }
+
     public String getUserName() {
-        return user.getName();
+        return getUser().getName();
+    }
+
+    public UUID getProjectId() {
+        return projectId;
     }
 
     public Project getProject() {
+        if (project == null) {
+            synchronized (this) {
+                if (project == null) {
+                    project = ProjectDaoSql.getInstance().restoreForId(projectId);
+                }
+            }
+        }
         return project;
     }
 
-    public TaskEntry setProject(Project project) {
-        this.project = project;
-        return this;
+    private void setProject(UUID projectId) {
+        this.project = null;
+        this.projectId = projectId;
+    }
+
+    public UUID getTaskId() {
+        return taskId;
     }
 
     public Task getTask() {
+        if (task == null) {
+            synchronized (this) {
+                if (task == null) {
+                    task = TaskDaoSql.getInstance().restoreForId(taskId);
+                }
+            }
+        }
         return task;
     }
 
-    public TaskEntry setTask(Task task) {
-        this.task = task;
-        return this;
+    private void setTask(UUID taskId) {
+        this.task = null;
+        this.taskId = taskId;
     }
 
-    public TaskEntry setNotes(String notes) {
+    public void setNotes(String notes) {
         this.notes = notes;
-        return this;
+    }
+
+    public String getNotes() {
+        return this.notes;
     }
 
     public Date getStartDate() {
         return startDate;
     }
 
-    public TaskEntry setStartDate(Date startDate) {
+    public void setStartDate(Date startDate) {
         this.startDate = startDate;
-        return this;
     }
 
-    public Date getEndDate() {
-        return endDate;
+    public String getFormattedStartDate() {
+        String result = "";
+        if (startDate != null) {
+            result = format.format(startDate);
+        }
+        return result;
     }
 
-    public TaskEntry setEndDate(Date endDate) {
-        this.endDate = endDate;
-        return this;
+    public double getDuration() {
+        return duration;
     }
 
-
-//    public String getFormattedDueDate() {
-//        String result = "";
-//        if (dueDate != null) {
-//            result = format.format(dueDate);
-//        }
-//        return result;
-//    }
-//
-//
-//    public void setDueDate(String dueDate) {
-//        try {
-//            this.dueDate = format.parse(dueDate);
-//        }
-//        catch (ParseException e) {
-//            throw new IllegalArgumentException("Unable to parse the provided date");
-//        }
-//    }
+    public void setDuration(double duration) {
+        this.duration = duration;
+    }
 }

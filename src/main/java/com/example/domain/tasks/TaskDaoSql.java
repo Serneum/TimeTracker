@@ -17,6 +17,7 @@ public class TaskDaoSql extends DaoSql<Task> implements Dao<Task> {
             "NAME TEXT"
     };
     private static final String SELECT_ALL = "SELECT * FROM TASK ORDER BY NAME ASC";
+    private static final String SELECT_FOR_ID = "SELECT * FROM TASK WHERE ID=?";
     private static final String INSERT = "INSERT INTO TASK(ID, NAME) VALUES(?, ?)";
     private static final String UPDATE = "UPDATE TASK SET NAME=? WHERE ID=?";
     private static final String DELETE = "DELETE FROM TASK WHERE ID=?";
@@ -36,6 +37,10 @@ public class TaskDaoSql extends DaoSql<Task> implements Dao<Task> {
 
     public List<Task> restoreAll() {
         return super.restoreAll(SELECT_ALL);
+    }
+
+    public Task restoreForId(UUID id) {
+        return super.restore(SELECT_FOR_ID, id.toString());
     }
 
     public void insert(Persistent p) {

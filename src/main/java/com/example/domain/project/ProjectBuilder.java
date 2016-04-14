@@ -1,17 +1,18 @@
 package com.example.domain.project;
 
 import com.example.domain.customer.Customer;
-import com.example.domain.user.User;
 import org.apache.commons.lang.StringUtils;
 
+import java.util.UUID;
+
 public class ProjectBuilder {
-    private Customer customer;
+    private UUID customer;
     private String name;
 
     public ProjectBuilder() {
     }
 
-    public ProjectBuilder customer(Customer customer) {
+    public ProjectBuilder customer(UUID customer) {
         this.customer = customer;
         return this;
     }
@@ -34,7 +35,7 @@ public class ProjectBuilder {
         return result;
     }
 
-    public Customer getCustomer() {
+    public UUID getCustomer() {
         return customer;
     }
 

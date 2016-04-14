@@ -11,20 +11,18 @@ import java.util.UUID;
 
 public class ProjectDaoSql extends DaoSql<Project> implements Dao<Project> {
 
-    private static final String TABLE_NAME = "TASK";
+    private static final String TABLE_NAME = "PROJECT";
     private static final String[] COLUMN_DEFINITIONS = new String[] {
             "ID TEXT PRIMARY KEY NOT NULL",
-            "USER TEXT NOT NULL",
-            "DESCRIPTION TEXT",
-            "DUE_DATE TEXT NOT NULL",
-            "COMPLETED TEXT NOT NULL",
-            "FOREIGN KEY(USER) REFERENCES TASK_USER(ID)"
+            "CUSTOMER TEXT NOT NULL",
+            "NAME TEXT NOT NULL",
+            "FOREIGN KEY(CUSTOMER) REFERENCES CUSTOMER(ID)"
     };
-    private static final String SELECT_ALL_FOR_USER = "SELECT * FROM TASK INNER JOIN TASK_USER AS TU ON TU.ID = USER WHERE USER=? ORDER BY DUE_DATE ASC";
-    private static final String SELECT_FOR_ID_AND_USER = "SELECT * FROM TASK INNER JOIN TASK_USER AS TU ON TU.ID = USER WHERE TASK.ID=? AND USER=? ORDER BY DUE_DATE ASC";
-    private static final String INSERT = "INSERT INTO TASK(ID, USER, DESCRIPTION, DUE_DATE, COMPLETED) VALUES(?, ?, ?, ?, ?)";
-    private static final String UPDATE = "UPDATE TASK SET DESCRIPTION=?, DUE_DATE=?, COMPLETED=? WHERE ID=?";
-    private static final String DELETE = "DELETE FROM TASK WHERE ID=?";
+    private static final String SELECT_ALL = "SELECT * FROM PROJECT ORDER BY NAME ASC";
+    private static final String SELECT_FOR_ID = "SELECT * FROM PROJECT WHERE ID=? ORDER BY NAME ASC";
+    private static final String INSERT = "INSERT INTO PROJECT(ID, CUSTOMER, NAME) VALUES(?, ?, ?)";
+    private static final String UPDATE = "UPDATE PROJECT SET NAME=? WHERE ID=?";
+    private static final String DELETE = "DELETE FROM PROJECT WHERE ID=?";
 
     private static ProjectDaoSql instance;
 
@@ -39,28 +37,24 @@ public class ProjectDaoSql extends DaoSql<Project> implements Dao<Project> {
         super.createTableIfNeeded(TABLE_NAME, COLUMN_DEFINITIONS);
     }
 
-    public List<Project> restoreAllForUser(UUID id) {
-        return super.restoreAll(SELECT_ALL_FOR_USER, id.toString());
+    public List<Project> restoreAll() {
+        return super.restoreAll(SELECT_ALL);
     }
 
-    public Project restoreForIdAndUser(UUID id, UUID userId) {
-        return super.restore(SELECT_FOR_ID_AND_USER, id.toString(), userId.toString());
+    public Project restoreForId(UUID id) {
+        return super.restore(SELECT_FOR_ID, id.toString());
     }
 
     public void insert(Persistent p) {
         Project project = (Project) p;
         super.update(INSERT, project.getId().toString(),
-                             project.getUser().getId().toString(),
-                             project.getDescription(),
-                             project.getFormattedDueDate(),
-                             String.valueOf(project.isCompleted()));
+                             project.getCustomerId().toString(),
+                             project.getName());
     }
 
     public void update(Persistent p) {
         Project project = (Project) p;
-        super.update(UPDATE, project.getDescription(),
-                             project.getFormattedDueDate(),
-                             String.valueOf(project.isCompleted()),
+        super.update(UPDATE, project.getName(),
                              project.getId().toString());
     }
 
@@ -75,24 +69,15 @@ public class ProjectDaoSql extends DaoSql<Project> implements Dao<Project> {
         try {
             if (rs.next()) {
                 UUID id = UUID.fromString(rs.getString("ID"));
-                String description = rs.getString("DESCRIPTION");
-                String dueDate = rs.getString("DUE_DATE");
-                boolean completed = Boolean.valueOf(rs.getString("COMPLETED"));
+                UUID customerId = UUID.fromString(rs.getString("CUSTOMER"));
+                String name = rs.getString("NAME");
 
-                UUID userId = UUID.fromString(rs.getString("USER"));
-                String userName = rs.getString("NAME");
-                String password = rs.getString("PASSWORD");
-                User user = new User(userId, userName);
-                user.setPassword(password);
-
-                result = new Project(id, user);
-                result.setDescription(description);
-                result.setDueDate(dueDate);
-                result.setCompleted(completed);
+                ProjectBuilder builder = new ProjectBuilder().customer(customerId).name(name);
+                result = new Project(id, builder);
             }
         }
         catch (Exception e) {
-            System.err.println("Error restoring task from database: " + e);
+            System.err.println("Error restoring project from database: " + e);
             e.printStackTrace();
         }
 

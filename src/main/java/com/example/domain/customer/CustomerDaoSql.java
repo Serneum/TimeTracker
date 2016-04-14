@@ -11,20 +11,28 @@ import java.util.UUID;
 
 public class CustomerDaoSql extends DaoSql<Customer> implements Dao<Customer> {
 
-    private static final String TABLE_NAME = "TASK";
+    private static final String TABLE_NAME = "CUSTOMER";
     private static final String[] COLUMN_DEFINITIONS = new String[] {
             "ID TEXT PRIMARY KEY NOT NULL",
-            "USER TEXT NOT NULL",
-            "DESCRIPTION TEXT",
-            "DUE_DATE TEXT NOT NULL",
-            "COMPLETED TEXT NOT NULL",
-            "FOREIGN KEY(USER) REFERENCES TASK_USER(ID)"
+            "NAME TEXT NOT NULL",
+            "ADDRESS1 TEXT",
+            "ADDRESS2 TEXT",
+            "ADDRESS3 TEXT",
+            "CITY TEXT",
+            "STATE TEXT",
+            "ZIP INTEGER",
+            "PHONE1 TEXT",
+            "PHONE2 TEXT",
+            "FAX1 TEXT",
+            "FAX2 TEXT",
+            "EMAIL TEXT",
+            "WEBSITE TEXT"
     };
-    private static final String SELECT_ALL_FOR_USER = "SELECT * FROM TASK INNER JOIN TASK_USER AS TU ON TU.ID = USER WHERE USER=? ORDER BY DUE_DATE ASC";
-    private static final String SELECT_FOR_ID_AND_USER = "SELECT * FROM TASK INNER JOIN TASK_USER AS TU ON TU.ID = USER WHERE TASK.ID=? AND USER=? ORDER BY DUE_DATE ASC";
-    private static final String INSERT = "INSERT INTO TASK(ID, USER, DESCRIPTION, DUE_DATE, COMPLETED) VALUES(?, ?, ?, ?, ?)";
-    private static final String UPDATE = "UPDATE TASK SET DESCRIPTION=?, DUE_DATE=?, COMPLETED=? WHERE ID=?";
-    private static final String DELETE = "DELETE FROM TASK WHERE ID=?";
+    private static final String SELECT_ALL = "SELECT * FROM CUSTOMER ORDER BY NAME ASC";
+    private static final String SELECT_FOR_ID = "SELECT * FROM CUSTOMER WHERE ID=?";
+    private static final String INSERT = "INSERT INTO CUSTOMER(ID, NAME, ADDRESS1, ADDRESS2, ADDRESS3, CITY, STATE, ZIP, PHONE1, PHONE2, FAX1, FAX2, EMAIL, WEBSITE) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    private static final String UPDATE = "UPDATE CUSTOMER SET NAME=?, ADDRESS1=?, ADDRESS2=?, ADDRESS3=?, CITY=?, STATE=?, ZIP=?, PHONE1=?, PHONE2=?, FAX1=?, FAX2=?, EMAIL=?, WEBSITE=? WHERE ID=?";
+    private static final String DELETE = "DELETE FROM CUSTOMER WHERE ID=?";
 
     private static CustomerDaoSql instance;
 
@@ -39,28 +47,47 @@ public class CustomerDaoSql extends DaoSql<Customer> implements Dao<Customer> {
         super.createTableIfNeeded(TABLE_NAME, COLUMN_DEFINITIONS);
     }
 
-    public List<Customer> restoreAllForUser(UUID id) {
-        return super.restoreAll(SELECT_ALL_FOR_USER, id.toString());
+    public List<Customer> restoreAll() {
+        return super.restoreAll(SELECT_ALL);
     }
 
-    public Customer restoreForIdAndUser(UUID id, UUID userId) {
-        return super.restore(SELECT_FOR_ID_AND_USER, id.toString(), userId.toString());
+    public Customer restoreForId(UUID id) {
+        return super.restore(SELECT_FOR_ID, id.toString());
     }
 
     public void insert(Persistent p) {
         Customer customer = (Customer) p;
         super.update(INSERT, customer.getId().toString(),
-                             customer.getUser().getId().toString(),
-                             customer.getDescription(),
-                             customer.getFormattedDueDate(),
-                             String.valueOf(customer.isCompleted()));
+                             customer.getName(),
+                             customer.getAddress1(),
+                             customer.getAddress2(),
+                             customer.getAddress3(),
+                             customer.getCity(),
+                             customer.getState(),
+                             String.valueOf(customer.getZip()),
+                             customer.getPhone1(),
+                             customer.getPhone2(),
+                             customer.getFax1(),
+                             customer.getFax2(),
+                             customer.getEmail(),
+                             customer.getWebsite());
     }
 
     public void update(Persistent p) {
         Customer customer = (Customer) p;
-        super.update(UPDATE, customer.getDescription(),
-                             customer.getFormattedDueDate(),
-                             String.valueOf(customer.isCompleted()),
+        super.update(UPDATE, customer.getName(),
+                             customer.getAddress1(),
+                             customer.getAddress2(),
+                             customer.getAddress3(),
+                             customer.getCity(),
+                             customer.getState(),
+                             String.valueOf(customer.getZip()),
+                             customer.getPhone1(),
+                             customer.getPhone2(),
+                             customer.getFax1(),
+                             customer.getFax2(),
+                             customer.getEmail(),
+                             customer.getWebsite(),
                              customer.getId().toString());
     }
 
@@ -75,24 +102,28 @@ public class CustomerDaoSql extends DaoSql<Customer> implements Dao<Customer> {
         try {
             if (rs.next()) {
                 UUID id = UUID.fromString(rs.getString("ID"));
-                String description = rs.getString("DESCRIPTION");
-                String dueDate = rs.getString("DUE_DATE");
-                boolean completed = Boolean.valueOf(rs.getString("COMPLETED"));
+                String name = rs.getString("NAME");
+                String address1 = rs.getString("ADDRESS1");
+                String address2 = rs.getString("ADDRESS2");
+                String address3 = rs.getString("ADDRESS3");
+                String city = rs.getString("CITY");
+                String state = rs.getString("STATE");
+                int zip = Integer.valueOf(rs.getString("ZIP"));
+                String phone1 = rs.getString("PHONE1");
+                String phone2 = rs.getString("PHONE2");
+                String fax1 = rs.getString("FAX1");
+                String fax2 = rs.getString("FAX2");
+                String email = rs.getString("EMAIL");
+                String website = rs.getString("WEBSITE");
 
-                UUID userId = UUID.fromString(rs.getString("USER"));
-                String userName = rs.getString("NAME");
-                String password = rs.getString("PASSWORD");
-                User user = new User(userId, userName);
-                user.setPassword(password);
-
-                result = new Customer(id, user);
-                result.setDescription(description);
-                result.setDueDate(dueDate);
-                result.setCompleted(completed);
+                CustomerBuilder builder = new CustomerBuilder().name(name).address1(address1).address2(address2)
+                        .address3(address3).city(city).state(state).zip(zip).phone1(phone1).phone2(phone2).fax1(fax1)
+                        .fax2(fax2).email(email).website(website);
+                result = new Customer(id, builder);
             }
         }
         catch (Exception e) {
-            System.err.println("Error restoring task from database: " + e);
+            System.err.println("Error restoring customer from database: " + e);
             e.printStackTrace();
         }
 

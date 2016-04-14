@@ -5,29 +5,30 @@ import com.example.domain.tasks.Task;
 import com.example.domain.user.User;
 
 import java.util.Date;
+import java.util.UUID;
 
 public class TaskEntryBuilder {
-    private User user;
-    private Project project;
-    private Task task;
+    private UUID user;
+    private UUID project;
+    private UUID task;
     private String notes;
     private Date startDate;
-    private Date endDate;
+    private double duration;
 
     public TaskEntryBuilder() {
     }
 
-    public TaskEntryBuilder user(User user) {
+    public TaskEntryBuilder user(UUID user) {
         this.user = user;
         return this;
     }
 
-    public TaskEntryBuilder project(Project project) {
+    public TaskEntryBuilder project(UUID project) {
         this.project = project;
         return this;
     }
 
-    public TaskEntryBuilder task(Task task) {
+    public TaskEntryBuilder task(UUID task) {
         this.task = task;
         return this;
     }
@@ -42,8 +43,8 @@ public class TaskEntryBuilder {
         return this;
     }
 
-    public TaskEntryBuilder endDate(Date endDate) {
-        this.endDate = endDate;
+    public TaskEntryBuilder duration(double duration) {
+        this.duration = duration;
         return this;
     }
 
@@ -61,22 +62,18 @@ public class TaskEntryBuilder {
         if (getTask() == null) {
             throw new IllegalStateException("A task must be provided");
         }
-
-        if (getStartDate() == null) {
-            throw new IllegalStateException("A start date must be provided");
-        }
         return result;
     }
 
-    public User getUser() {
+    public UUID getUser() {
         return user;
     }
 
-    public Project getProject() {
+    public UUID getProject() {
         return project;
     }
 
-    public Task getTask() {
+    public UUID getTask() {
         return task;
     }
 
@@ -88,7 +85,7 @@ public class TaskEntryBuilder {
         return startDate;
     }
 
-    public Date endDate() {
-        return endDate;
+    public double getDuration() {
+        return duration;
     }
 }
