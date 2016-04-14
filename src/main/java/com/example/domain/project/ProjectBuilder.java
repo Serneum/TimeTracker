@@ -22,7 +22,8 @@ public class ProjectBuilder {
     }
 
     public Project build() {
-        // This goes against the builder pattern, but we must check the username before trying to create the Key in the Task
+        // Create the Project
+        Project result = new Project(this);
         if (getCustomer() == null) {
             throw new IllegalStateException("A customer must be provided");
         }
@@ -30,9 +31,6 @@ public class ProjectBuilder {
         if (StringUtils.isBlank(getName())) {
             throw new IllegalStateException("A name must be provided");
         }
-
-        // Create the Project
-        Project result = new Project(this);
         return result;
     }
 

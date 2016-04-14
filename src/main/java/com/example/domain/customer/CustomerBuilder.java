@@ -149,7 +149,8 @@ public class CustomerBuilder {
     }
 
     public Customer build() {
-        // This goes against the builder pattern, but we must check the username before trying to create the Key in the Task
+        // Create the Customer
+        Customer result = new Customer(this);
         if (getUser() == null) {
             throw new IllegalStateException("A user must be provided");
         }
@@ -157,9 +158,6 @@ public class CustomerBuilder {
         if (StringUtils.isBlank(getName())) {
             throw new IllegalStateException("A name must be provided");
         }
-
-        // Create the Customer
-        Customer result = new Customer(this);
         return result;
     }
 }
