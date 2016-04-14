@@ -44,6 +44,28 @@ public class TimeEntryServlet extends BaseServlet {
             }
         }
 
+        String start = getSanitizedValue(req, "start");
+        String stop = getSanitizedValue(req, "stop");
+        if (StringUtils.isNotBlank(start) || StringUtils.isNotBlank(stop)) {
+            String entryId = StringUtils.isNotBlank(start) ? start : stop;
+            TaskEntry editEntry = dao.restoreForIdAndUser(UUID.fromString(entryId), user.getId());
+
+            // Set duration first so that we don't get a null start date
+            if (StringUtils.isNotBlank(stop)) {
+                Date now = new Date();
+                Date startDate = editEntry.getStartDate();
+                editEntry.setDuration(now.getTime() - startDate.getTime());
+            }
+
+            if (StringUtils.isBlank(start)) {
+                editEntry.setStartDate(null);
+            }
+            else {
+                editEntry.setStartDate(new Date());
+            }
+            dao.update(editEntry);
+        }
+
         List<TaskEntry> entryList = dao.restoreAllForUser(user.getId());
         String error = getSanitizedValue(req, "error");
         if (StringUtils.isNotBlank(error)) {
@@ -70,8 +92,6 @@ public class TimeEntryServlet extends BaseServlet {
         String projectId = getSanitizedValue(req, "project");
         String taskId = getSanitizedValue(req, "task");
         String entryId = getSanitizedValue(req, "entryId");
-        String start = getSanitizedValue(req, "start");
-        String stop = getSanitizedValue(req, "stop");
 
         boolean isNew = false;
         TaskEntry taskEntry = null;
@@ -97,22 +117,6 @@ public class TimeEntryServlet extends BaseServlet {
                     // Update existing entry
                     taskEntry = dao.restoreForIdAndUser(UUID.fromString(entryId), user.getId());
                     taskEntry.setNotes(notes);
-
-                    if (StringUtils.isNotBlank(start) || StringUtils.isNotBlank(stop)) {
-                        if (StringUtils.isBlank(start)) {
-                            taskEntry.setStartDate(null);
-                        }
-                        else {
-                            taskEntry.setStartDate(new Date());
-                        }
-
-                        if (StringUtils.isNotBlank(stop)) {
-                            Date now = new Date();
-                            Date startDate = taskEntry.getStartDate();
-                            taskEntry.setDuration(now.getTime() - startDate.getTime());
-                        }
-                    }
-
                 }
             }
             catch (IllegalArgumentException e) {

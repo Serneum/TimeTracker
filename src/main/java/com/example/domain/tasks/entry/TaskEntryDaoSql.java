@@ -32,7 +32,7 @@ public class TaskEntryDaoSql extends DaoSql<TaskEntry> implements Dao<TaskEntry>
             "PRIMARY KEY(USER, PROJECT, TASK)"
     };
     private static final String SELECT_ALL_FOR_USER = "SELECT * FROM TASK_ENTRY INNER JOIN USER U ON U.ID = USER WHERE USER=?";
-    private static final String SELECT_FOR_ID_AND_USER = "SELECT * FROM TASK_ENTRY INNER JOIN USER U ON U.ID = USER WHERE TASK.ID=? AND USER=?";
+    private static final String SELECT_FOR_ID_AND_USER = "SELECT * FROM TASK_ENTRY TE INNER JOIN USER U ON U.ID = USER WHERE TE.ID=? AND USER=?";
     private static final String INSERT = "INSERT INTO TASK_ENTRY(ID, USER, PROJECT, TASK, NOTES, START_DATE, DURATION) VALUES(?, ?, ?, ?, ?, ?, ?)";
     private static final String UPDATE = "UPDATE TASK_ENTRY SET NOTES=?, START_DATE=?, DURATION=? WHERE ID=?";
     private static final String DELETE = "DELETE FROM TASK_ENTRY WHERE ID=?";
@@ -72,7 +72,7 @@ public class TaskEntryDaoSql extends DaoSql<TaskEntry> implements Dao<TaskEntry>
     public void update(Persistent p) {
         TaskEntry taskEntry = (TaskEntry) p;
         super.update(UPDATE, taskEntry.getNotes(),
-                             taskEntry.getStartDate() == null ? null : taskEntry.getStartDate().toString(),
+                             taskEntry.getStartDate() == null ? null : taskEntry.getFormattedStartDate(),
                              String.valueOf(taskEntry.getDuration()),
                              taskEntry.getId().toString());
     }
