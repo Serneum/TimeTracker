@@ -76,6 +76,15 @@
         <url-pattern>/entries/</url-pattern>
     </servlet-mapping>
 
+    <servlet>
+        <servlet-name>customers</servlet-name>
+        <servlet-class>com.example.domain.customer.CustomersServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>customers</servlet-name>
+        <url-pattern>/customers/</url-pattern>
+    </servlet-mapping>
+
     <!-- Security -->
     <!--<security-constraint>-->
         <!--<web-resource-collection>-->

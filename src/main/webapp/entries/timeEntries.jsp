@@ -27,6 +27,7 @@
                         <span class="caret"></span>
                     </a>
                     <ul class="dropdown-menu">
+                        <li><a href="${pageContext.request.contextPath}/customers/">Customers</a></li>
                         <li><a href="${pageContext.request.contextPath}/projects/">Projects</a></li>
                         <li><a href="${pageContext.request.contextPath}/tasks/">Tasks</a></li>
                         <li><a href="${pageContext.request.contextPath}/entries/">Entries</a></li>

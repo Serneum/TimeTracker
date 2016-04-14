@@ -35,6 +35,7 @@ public class CustomerDaoSql extends DaoSql<Customer> implements Dao<Customer> {
     };
     private static final String SELECT_ALL = "SELECT * FROM CUSTOMER ORDER BY NAME ASC";
     private static final String SELECT_FOR_ID = "SELECT * FROM CUSTOMER WHERE ID=?";
+    private static final String SELECT_FOR_NAME = "SELECT * FROM CUSTOMER WHERE NAME=?";
     private static final String INSERT = "INSERT INTO CUSTOMER(ID, NAME, ADDRESS1, ADDRESS2, ADDRESS3, CITY, STATE, ZIP, PHONE1, PHONE2, FAX1, FAX2, EMAIL, WEBSITE) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     private static final String UPDATE = "UPDATE CUSTOMER SET NAME=?, ADDRESS1=?, ADDRESS2=?, ADDRESS3=?, CITY=?, STATE=?, ZIP=?, PHONE1=?, PHONE2=?, FAX1=?, FAX2=?, EMAIL=?, WEBSITE=? WHERE ID=?";
     private static final String DELETE = "DELETE FROM CUSTOMER WHERE ID=?";
@@ -97,6 +98,10 @@ public class CustomerDaoSql extends DaoSql<Customer> implements Dao<Customer> {
 
     public Customer restoreForId(UUID id) {
         return super.restore(SELECT_FOR_ID, id.toString());
+    }
+
+    public Customer restoreForName(String name) {
+        return super.restore(SELECT_FOR_NAME, name);
     }
 
     public void insert(Persistent p) {
