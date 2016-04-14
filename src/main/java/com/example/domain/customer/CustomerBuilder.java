@@ -1,17 +1,15 @@
 package com.example.domain.customer;
 
-import com.example.domain.user.User;
 import org.apache.commons.lang.StringUtils;
 
 public class CustomerBuilder {
-    private User user;
     private String name;
     private String address1;
     private String address2;
     private String address3;
     private String city;
     private String State;
-    private int zip;
+    private String zip;
     private String phone1;
     private String phone2;
     private String fax1;
@@ -20,11 +18,6 @@ public class CustomerBuilder {
     private String website;
 
     public CustomerBuilder() {
-    }
-
-    public CustomerBuilder user(User user) {
-        this.user = user;
-        return this;
     }
 
     public CustomerBuilder name(String name) {
@@ -57,7 +50,7 @@ public class CustomerBuilder {
         return this;
     }
 
-    public CustomerBuilder zip(int zip) {
+    public CustomerBuilder zip(String zip) {
         this.zip = zip;
         return this;
     }
@@ -92,10 +85,6 @@ public class CustomerBuilder {
         return this;
     }
 
-    public User getUser() {
-        return user;
-    }
-
     public String getName() {
         return name;
     }
@@ -120,7 +109,7 @@ public class CustomerBuilder {
         return State;
     }
 
-    public int getZip() {
+    public String getZip() {
         return zip;
     }
 
@@ -151,10 +140,6 @@ public class CustomerBuilder {
     public Customer build() {
         // Create the Customer
         Customer result = new Customer(this);
-        if (getUser() == null) {
-            throw new IllegalStateException("A user must be provided");
-        }
-
         if (StringUtils.isBlank(getName())) {
             throw new IllegalStateException("A name must be provided");
         }

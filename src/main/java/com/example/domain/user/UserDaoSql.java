@@ -32,6 +32,12 @@ public class UserDaoSql extends DaoSql<User> implements Dao<User> {
 
     public void createTableIfNeeded() {
         super.createTableIfNeeded(TABLE_NAME, COLUMN_DEFINITIONS);
+
+        User user = restoreForName("admin");
+        if (user == null) {
+            user = new User("admin", "admin");
+            insert(user);
+        }
     }
 
     public User restoreForId(UUID id) {

@@ -9,16 +9,13 @@ import java.util.UUID;
 public class Customer extends Persistent {
     static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
 
-    User user;
-
-    private UUID id;
     private String name;
     private String address1;
     private String address2;
     private String address3;
     private String city;
     private String State;
-    private int zip;
+    private String zip;
     private String phone1;
     private String phone2;
     private String fax1;
@@ -36,9 +33,7 @@ public class Customer extends Persistent {
     }
 
     public Customer(CustomerBuilder builder) {
-        this();
         this.id = UUID.randomUUID();
-        this.user = builder.getUser();
         setName(builder.getName());
         setAddress1(builder.getAddress1());
         setAddress2(builder.getAddress2());
@@ -52,14 +47,6 @@ public class Customer extends Persistent {
         setFax2(builder.getFax2());
         setEmail(builder.getEmail());
         setWebsite(builder.getWebsite());
-    }
-
-    public User getUser() {
-        return user;
-    }
-
-    public String getUserName() {
-        return user.getName();
     }
 
     public String getName() {
@@ -110,11 +97,11 @@ public class Customer extends Persistent {
         State = state;
     }
 
-    public int getZip() {
+    public String getZip() {
         return zip;
     }
 
-    public void setZip(int zip) {
+    public void setZip(String zip) {
         this.zip = zip;
     }
 
@@ -166,12 +153,10 @@ public class Customer extends Persistent {
         this.website = website;
     }
 
-//    public void setDueDate(String dueDate) {
-//        try {
-//            this.dueDate = format.parse(dueDate);
-//        }
-//        catch (ParseException e) {
-//            throw new IllegalArgumentException("Unable to parse the provided date");
-//        }
-//    }
+    public String toString() {
+        return "[ Id: " + getId() + "\nName:" + getName() + "\nAddress1: " + getAddress1() + "\nAddress2: " + getAddress2() +
+                "\nAddress3: " + getAddress3() + "\nCity: " + getCity()  + "\nState: " + getState() + "\nZip: " + getZip() +
+                "\nPhone1: " + getPhone1() + "\nPhone2: " + getPhone2() + "\nFax1: " + getFax1() + "\nFax2: " + getFax2() +
+                "\nEmail: " + getEmail() + "\nWebsite: " + getWebsite() + " ]";
+    }
 }
