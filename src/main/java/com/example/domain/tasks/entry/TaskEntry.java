@@ -164,9 +164,8 @@ public class TaskEntry extends Persistent {
         if (minutes > 0) {
             durationBuilder.append(minutes).append("m ");
         }
-        if (seconds > 0) {
-            durationBuilder.append(seconds).append("s");
-        }
+        durationBuilder.append(seconds).append("s");
+
         return durationBuilder.toString();
     }
 
