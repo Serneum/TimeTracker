@@ -1,5 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="com.example.domain.user.UserService" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="com.example.domain.tasks.Task" %>
 <%@ page import="java.util.Date" %>
@@ -28,6 +27,9 @@
                                 <span class="caret"></span>
                             </a>
                             <ul class="dropdown-menu">
+                                <li><a href="${pageContext.request.contextPath}/projects/">Projects</a></li>
+                                <li><a href="${pageContext.request.contextPath}/tasks/">Tasks</a></li>
+                                <li><a href="${pageContext.request.contextPath}/entries/">Entries</a></li>
                                 <li><a href="${pageContext.request.contextPath}/logout/">Sign Out</a></li>
                             </ul>
                         </li>
@@ -37,35 +39,30 @@
         </nav>
         <div class="container">
             <div class="panel panel-default">
-                <div class="panel-heading">Tasks</div>
+                <div class="panel-heading">Projects</div>
                 <table class="table">
                     <tr>
                         <th style="width: 10%">#</th>
-                        <th style="width: 50%">Description</th>
-                        <th style="width: 20%">Due Date</th>
-                        <th style="width: 10%">Completed</th>
+                        <th style="width: 50%">Customer</th>
+                        <th style="width: 20%">Name</th>
                         <th style="width: 10%"></th>
                     </tr>
 
                     <c:choose>
-                        <c:when test="${empty taskList}">
+                        <c:when test="${empty projectList}">
                             <tr>
-                                <td colspan="5" style="text-align: center">There are no tasks.</td>
+                                <td colspan="5" style="text-align: center">There are no projects.</td>
                             </tr>
                         </c:when>
                         <c:otherwise>
-                            <c:forEach var="task" items="${taskList}" varStatus="loop">
+                            <c:forEach var="project" items="${projectList}" varStatus="loop">
                                 <tr>
                                     <td>${loop.index + 1}</td>
-                                    <td>${task.description}</td>
-                                    <jsp:useBean id="now" class="java.util.Date"/>
-                                    <td style="color: ${task.dueDate lt now and not task.completed ? "red" : "green"}">
-                                        ${task.formattedDueDate}
-                                    </td>
-                                    <td>${task.completed}</td>
+                                    <td>${project.customer.name}</td>
+                                    <td>${project.name}</td>
                                     <td>
                                         <c:if test="${not inEditMode}">
-                                            <a href="/tasks?edit=${task.id}" class="btn" role="button">
+                                            <a href="/projects?edit=${project.id}" class="btn" role="button">
                                                 <span class="glyphicon glyphicon-pencil"> Edit</span>
                                             </a>
                                         </c:if>
@@ -82,28 +79,30 @@
 
             <form action="#" method="post">
                 <div class="panel panel-default">
-                    <div class="panel-heading">${inEditMode ? "Edit" : "Create New"} Task</div>
+                    <div class="panel-heading">${inEditMode ? "Edit" : "Create New"} Project</div>
                     <table class="table">
                         <tr>
-                            <td>Description:</td>
-                            <td><textarea name="description" rows="3" cols="60">${inEditMode ? editTask.description : ""}</textarea></td>
+                            <td>Customer:</td>
+                            <td>
+                                <select name="customer">
+                                    <c:forEach items="${customerList}" var="customer">
+                                        <option value="${customer.id}">${customer.name}</option>
+                                    </c:forEach>
+                                </select>
+                            </td>
                         </tr>
                         <tr>
-                            <td>Due Date:</td>
-                            <td><input type="date" name="dueDate" value="${inEditMode ? editTask.formattedDueDate : ""}"></td>
-                        </tr>
-                        <tr>
-                            <td>Completed:</td>
-                            <td><input type="checkbox" name="completed" <c:if test="${inEditMode && editTask.completed}">checked="checked"</c:if>/></td>
+                            <td>Name:</td>
+                            <td><input type="test" name="name" value="${inEditMode ? editProject.name : ""}"></td>
                         </tr>
                         <c:if test="${inEditMode}">
-                            <input type="hidden" name="taskId" value="${editTask.id}">
+                            <input type="hidden" name="projectId" value="${editProject.id}">
                         </c:if>
                     </table>
                 </div>
                 <button type="submit" class="btn btn-primary">
                     <span class="glyphicon glyphicon-floppy-save" aria-hidden="true"></span>
-                    Save Task
+                    Save Project
                 </button>
             </form>
         </div>

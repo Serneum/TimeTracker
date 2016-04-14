@@ -8,6 +8,7 @@ import com.example.domain.project.ProjectBuilder;
 import com.example.domain.tasks.Task;
 import com.example.domain.tasks.TaskBuilder;
 import com.example.domain.user.User;
+import org.apache.commons.lang3.StringUtils;
 
 import java.sql.ResultSet;
 import java.util.Date;
@@ -33,7 +34,7 @@ public class TaskEntryDaoSql extends DaoSql<TaskEntry> implements Dao<TaskEntry>
     private static final String SELECT_ALL_FOR_USER = "SELECT * FROM TASK_ENTRY INNER JOIN USER U ON U.ID = USER WHERE USER=?";
     private static final String SELECT_FOR_ID_AND_USER = "SELECT * FROM TASK_ENTRY INNER JOIN USER U ON U.ID = USER WHERE TASK.ID=? AND USER=?";
     private static final String INSERT = "INSERT INTO TASK_ENTRY(ID, USER, PROJECT, TASK, NOTES, START_DATE, DURATION) VALUES(?, ?, ?, ?, ?, ?, ?)";
-    private static final String UPDATE = "UPDATE TASK_ENTRY SET NOTES=?, START_DATE=NULL, DURATION=? WHERE ID=?";
+    private static final String UPDATE = "UPDATE TASK_ENTRY SET NOTES=?, START_DATE=?, DURATION=? WHERE ID=?";
     private static final String DELETE = "DELETE FROM TASK_ENTRY WHERE ID=?";
 
     private static TaskEntryDaoSql instance;
@@ -71,6 +72,7 @@ public class TaskEntryDaoSql extends DaoSql<TaskEntry> implements Dao<TaskEntry>
     public void update(Persistent p) {
         TaskEntry taskEntry = (TaskEntry) p;
         super.update(UPDATE, taskEntry.getNotes(),
+                             taskEntry.getStartDate() == null ? null : taskEntry.getStartDate().toString(),
                              String.valueOf(taskEntry.getDuration()),
                              taskEntry.getId().toString());
     }
@@ -90,7 +92,13 @@ public class TaskEntryDaoSql extends DaoSql<TaskEntry> implements Dao<TaskEntry>
                 UUID projectId = UUID.fromString(rs.getString("PROJECT"));
                 UUID taskId = UUID.fromString(rs.getString("TASK"));
                 String notes = rs.getString("NOTES");
-                Date startDate = rs.getDate("START_DATE");
+
+                Date startDate = null;
+                String startDateStr = rs.getString("START_DATE");
+                if (StringUtils.isNotBlank(startDateStr)) {
+                    startDate = TaskEntry.format.parse(startDateStr);
+                }
+
                 double duration = rs.getDouble("DURATION");
 
                 TaskEntryBuilder builder = new TaskEntryBuilder().user(userId).project(projectId).task(taskId)

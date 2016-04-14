@@ -23,15 +23,6 @@
     </servlet>
 
     <servlet>
-        <servlet-name>tasks</servlet-name>
-        <servlet-class>com.example.domain.tasks.TasksServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>tasks</servlet-name>
-        <url-pattern>/tasks/</url-pattern>
-    </servlet-mapping>
-
-    <servlet>
         <servlet-name>login</servlet-name>
         <servlet-class>com.example.auth.LoginServlet</servlet-class>
     </servlet>
@@ -56,6 +47,33 @@
     <servlet-mapping>
         <servlet-name>register</servlet-name>
         <url-pattern>/register/</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>projects</servlet-name>
+        <servlet-class>com.example.domain.project.ProjectsServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>projects</servlet-name>
+        <url-pattern>/projects/</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>tasks</servlet-name>
+        <servlet-class>com.example.domain.tasks.TasksServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>tasks</servlet-name>
+        <url-pattern>/tasks/</url-pattern>
+    </servlet-mapping>
+
+    <servlet>
+        <servlet-name>entries</servlet-name>
+        <servlet-class>com.example.domain.task.entry.TimeEntryServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>entries</servlet-name>
+        <url-pattern>/entries/</url-pattern>
     </servlet-mapping>
 
     <!-- Security -->

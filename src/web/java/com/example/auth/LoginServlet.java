@@ -58,7 +58,7 @@ public class LoginServlet extends BaseServlet {
             doGet(req, resp);
         }
 
-        resp.sendRedirect(req.getContextPath() + "/tasks/");
+        resp.sendRedirect(req.getContextPath() + "/entries/");
     }
 
 }

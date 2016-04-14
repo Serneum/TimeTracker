@@ -15,7 +15,7 @@ import java.util.Date;
 import java.util.UUID;
 
 public class TaskEntry extends Persistent {
-    static SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+    static public SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
     private UUID userId;
     private User user;
