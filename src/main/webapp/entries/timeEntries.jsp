@@ -59,24 +59,24 @@
                     <c:forEach var="entry" items="${entryList}" varStatus="loop">
                         <tr>
                             <td>${loop.index + 1}</td>
-                            <td>${entry.name} (${entry.project.name})</td>
+                            <td>${entry.task.name} (${entry.project.name})</td>
                             <td>${entry.notes}</td>
                             <td>${entry.duration}</td>
                             <td>
                                 <c:if test="${not inEditMode}">
                                     <c:choose>
                                         <c:when test="${empty entry.startDate}">
-                                            <a href="/tasks?start=${entry.id}" class="btn" role="button">
+                                            <a href="/entries?start=${entry.id}" class="btn" role="button">
                                                 <span class="glyphicon glyphicon-play-circle"> Start</span>
                                             </a>
                                         </c:when>
                                         <c:otherwise>
-                                            <a href="/tasks?stop=${entry.id}" class="btn" role="button">
+                                            <a href="/entries?stop=${entry.id}" class="btn" role="button">
                                                 <span class="glyphicon glyphicon-stop"> Stop</span>
                                             </a>
                                         </c:otherwise>
                                     </c:choose>
-                                    <a href="/tasks?edit=${entry.id}" class="btn" role="button">
+                                    <a href="/entries?edit=${entry.id}" class="btn" role="button">
                                         <span class="glyphicon glyphicon-pencil"> Edit</span>
                                     </a>
                                 </c:if>
