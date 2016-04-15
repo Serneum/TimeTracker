@@ -29,7 +29,7 @@ public class TaskEntry extends Persistent {
 
     private String notes;
     private Date startDate;
-    private long duration;
+    private long duration = 0;
 
     private TaskEntry() {
     }

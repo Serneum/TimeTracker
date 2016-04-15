@@ -13,7 +13,7 @@ public class TaskEntryBuilder {
     private UUID task;
     private String notes;
     private Date startDate;
-    private long duration;
+    private long duration = 0;
 
     public TaskEntryBuilder() {
     }
