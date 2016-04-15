@@ -54,7 +54,11 @@ public class TimeEntryServlet extends BaseServlet {
             if (StringUtils.isNotBlank(stop)) {
                 Date now = new Date();
                 Date startDate = editEntry.getStartDate();
-                long newDuration = now.getTime() - startDate.getTime();
+
+                long newDuration = 0;
+                if (startDate != null) {
+                    newDuration = now.getTime() - startDate.getTime();
+                }
                 editEntry.setDuration(editEntry.getDuration() + newDuration);
             }
 
